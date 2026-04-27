@@ -1,0 +1,75 @@
+#include <Arduino.h>
+#include <i2c_helper.h>
+#include "DmpTest.h"
+#include <TDK_dmp_helper.h>
+#include <MathHelper.h>
+
+/**
+ * Demo of 
+ */
+DmpTest::DmpTest() {
+  // constructor (empty for now)
+}
+
+// these are the esp32 pins physically jumpered or soldered to sensor chip
+#define I2C_SDA_DATAPIN 8 
+#define I2C_SCL_CLOCKPIN 9 
+#define HARDWRE_INT_PIN 4
+
+// 4.7kΩ resistors Pull-up resistors may be REQUIRED!
+
+TDK_dmp_helper* myDemo1 = nullptr;
+
+/* use this to prevent >1 threads/callbacks from trainwrecking i2c or serial bus
+   These are singletons, used throughout the application to assure 1 at a time */
+SemaphoreHandle_t i2cMutex = xSemaphoreCreateMutex();
+SemaphoreHandle_t serialMutex = xSemaphoreCreateMutex();
+
+/* gets called upon dmp interrupt [the Digital Motion Processor
+   on the invensense chip which does sensor fusion ]
+   Interrupts esp32 via the INT pin when it has new computed data ready
+   to send */
+// int intCt = 0;
+void newDataISR_task(std::string strA, Quaternion4 quat) {
+  // this is a callback invoked by the TDK_dmp_helper class when it gets an interrupt from the DMP chip, indicating new data ready. 
+  // I2C_Helper::serialPrintf(TDK_dmp_helper::_serialMutex, "int: %d ", intCt++);
+  std::string eulerStr = getEulerString(quat.x, quat.y, quat.z);
+  I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s eulerStr %s\n", strA.c_str(), eulerStr.c_str());
+  // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s\n", strA.c_str());
+}
+
+void DmpTest::setup() {
+  // I2C_Helper::testQMC5883_magnetometr_Connection(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN); return;
+  // ref: https://randomnerdtutorials.com/esp32-freertos-mutex-arduino/ 
+  // above is plagarized by ai... 
+  ////// not needed... this is at startup..  if (xSemaphoreTake(i2cMutex, MUTEX_TIMEOUT_MS)) {
+  I2C_Helper::scanI2C(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN);
+  xSemaphoreGive(i2cMutex); // "next"
+  ///// } else { throw std::runtime_error("Failed to take i2c mutex in setup"); }
+
+  //  Wire is a GLOBAL object defined in Arduino library, Wire.h
+  //  This SAME object is used by the device libraries used here, so
+  //  that lets you setup the "Wire" object here, and have it work for ALL i2c devices.  
+  Wire.setPins(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN); // tell it which pins for data and clock i2c.
+  myDemo1 = new TDK_dmp_helper(Wire, newDataISR_task, i2cMutex, serialMutex, HARDWRE_INT_PIN);
+  delay(100); // let bus settle
+  boolean my_i2c_address_69_true_68_false = true; // OR it's 0x68; use scanI2c to determine.
+  if (!myDemo1->begin(my_i2c_address_69_true_68_false)) {
+    Serial.println("begin failed. Press key to continue");
+    while (!Serial.available()) delay(10);
+  }
+  else Serial.println("DmpTest setup complete");
+  //imuHelper.setDeviceRegsNgetReady();
+  //// PASTE CALIBRATION RESULT IN BELOW SECTION 
+  /////  gyroHelper.performCalibration();
+
+  // **** CALIBRATION, run this to get above 2 lines to COPY from:  ****
+  ///////////////// magHelper.getMagCalibrateData(); return;
+}
+
+static int loopCounter = 0;
+void DmpTest::loop() {
+  // no loop code because timing comes from interrupt pin on DMP chip
+  delay(20000);
+}
+

@@ -1,0 +1,39 @@
+
+DO NOT DELETE!
+this was coded when i didnt realize how big  ble chunks can be.
+Its login to put chunks of long message into long one and
+terminate with zero byte.
+
+Its here in case I want to use ti sometime.
+
+.h file:
+void sendMessageInChunksOf20b(NimBLECharacteristic* theNotifyChar, const std::string& msg);
+void chunkSend_DEMO_NOTIFY(const std::string& msg);
+    
+.cpp file: 
+
+void BleHelper::chunkSend_DEMO_NOTIFY(const std::string& msg) {
+    this->sendMessageInChunksOf20b(this->DEMO_NOTIFY_REPEAT_BRGC, msg);
+}
+
+// note: gemini said to put const before str it fixed compiler err why ???
+void BleHelper::sendMessageInChunksOf20b(NimBLECharacteristic* theNotifyChar, const std::string& msg) {
+    const size_t chunkSize = 20;
+    // Build a working buffer that includes the binary zero terminator
+    std::string buffer = msg;
+    buffer.push_back('Q');
+    buffer.push_back('\0');   // append binary 0
+
+    // Reuse a single chunk buffer to avoid fragmentation
+    std::string chunk;
+    chunk.reserve(chunkSize);
+
+    for (size_t i = 0; i < buffer.size(); i += chunkSize) {
+        chunk.assign(buffer, i, chunkSize);
+
+        theNotifyChar->setValue(chunk);
+        theNotifyChar->notify();
+
+        delay(10); // pacing for Web Bluetooth
+    }
+}

@@ -1,0 +1,9 @@
+.pio
+# prevent vscode from messing up between different computers with different paths to stuff
+.vscode/*
+# BUT do save this file using !. Hope is doesnt cause mysterious problems later....
+!.vscode/extensions.json
+# note: if accidentally get .vscode in repo to this:
+#    - add above to .gitignore
+#    - rename local .vscode to .vscode.hid and push to repo
+#    - rename it back to .vscode and .gitignore prevents it getting pushed
