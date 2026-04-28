@@ -48,6 +48,11 @@ Structure of /lib:
   and more
 ```
 
+### C++ vs Java, Typescript  
+- C++ allows more specific control to hardware and memory and compiles to faster runnables. It appears rather Neanderthal and primitive to many coders today. I'm lucky because when I learned programming that's all there was.   
+- AI is great for learning it and asking about concepts which seem weird. It makes great short coding examples, but tends to bury simple code beneath layers of indirection and wrappers it invents.
+- My experience at using AI to write code for registers (it will look up reference tables) and BLE has been terrible. It uses wrong registers and values and insists its code is great, even after "correcting" problems you point out. It wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol. I followed its example until I realized nothing on the internet used that "protocol". 
+
 ### Monitoring i2c and interrupt using Oscilloscope 
 - This is not a necessary or typical part of a project of this type --but is fun to do. 
 - My first breakout board was a no-name board which crashed the i2c bus now and then and would intermittently provide interrupts.   
