@@ -4,7 +4,7 @@
   It's a gyro, accelerometer and compass combined with a *navigation computer* "DMP" all on a chip  
   Typically purchased on a "breakout board" with support hardware (power supply, level shifters, solder pads etc)  
   https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948
-- I'd like to think I could build a saildrone; not very possible but makes a good working goal.  
+- I'd like to think I could build a sailing drone; not very possible but makes a good working goal.  
 
 ### Overview of system presented here
 - Orientation data is calculated at intervals by the chip, based on the 3 sensors, using a "sensor fusion" algorithm. This performed by the chip, and is very complex. 
@@ -34,7 +34,19 @@
     ```xSemaphoreGive(xSemaphore)``` must be called to **release the semaphore**. If not done, an Albatross is waiting for you. 
   - I may be wrong but BLE **B**luetooth **L**ow **E**nergy takes care of its own concurrency.  
 
-
+### Libraries
+- Look in platformio.ini to see the Sparkfun library used to access the chip. 
+- I added helper functions, organized as those tied to specific hardware and universal use:  
+Structure of /lib:   
+```
+    lib/myLib
+        |     \
+     helpers   hdwreHelpers
+       /  \             |
+  i2chelper.cpp    TDK_dmp_helper.cpp
+  Mathhelper.cpp   [interrupt & semaphore here]
+  and more
+```
 
 ### Monitoring i2c and interrupt using Oscilloscope 
 - This is not a necessary or typical part of a project of this type --but is fun to do. 
