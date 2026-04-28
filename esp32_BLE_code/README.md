@@ -4,7 +4,8 @@
   It's a gyro, accelerometer and compass combined with a *navigation computer* "DMP" all on a chip  
   Typically purchased on a "breakout board" with support hardware (power supply, level shifters, solder pads etc)  
   https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948
-- I'd like to think I could build a sailing drone; not very possible but makes a good working goal.  
+- **Sailing Drone** is used as a project to give context to some comments; I'd like to build one but for now that's a source of motivation.    
+
 
 ### Overview of system presented here
 - Orientation data is calculated at intervals by the chip, based on the 3 sensors, using a "sensor fusion" algorithm. This performed by the chip, and is very complex. 
@@ -60,7 +61,7 @@ I used it as an excuse to buy a 2-trace oscilloscope to analyze the i2c clock an
 I later got a "brand name" board which works perfectly.
 
 
-I use oscilloscope FNRSI 2T53T 
+I use this oscilloscope: FNRSI 2T53T 
 - Trigger level: "trigger" button won't adust it, use "select" button instead as follows:   
 
   ![Screenshot 1](pics/OscilloscopeTrigger.jpg)  
@@ -70,7 +71,8 @@ I use oscilloscope FNRSI 2T53T
 
 
 ## VSCode settings:  
-Here are settings I find useful   
+Here are settings I find useful. "sameLine" tells the code-format feature not to put newline after open brace (takes too much space)  
+I have these here for when I setup a different computer and have forgotten all the settings...    
 ```
 # settings.json in .vscode for project 
 # or for user: (?)  ~/.config/Code/User/settings.json
@@ -80,6 +82,8 @@ Here are settings I find useful
 }
 ```
 ## VSCode notes about platformIO project folder vs GitHub location: 
+* In windows disable "hide hidden folders" in file manager to you can **see** the **.git folders**.  
 * During development, I sometimes have many independent unrelated projects in subfolders, all inside one GitHub repo. I do that so everything can be backed up in one place.    
-* in vscode platformIO (for esp32, not reactjs), need to point platformIO to one of the projects, using filesystem location.
+* in vscode platformIO (for esp32, not reactjs), need to point platformIO to one of the projects, using filesystem location. Note that this is **independent** from the GitHub repo project location.
+* After copying an existing project into a github repo, be sure to **delete the .git folder**. 
 
