@@ -4,7 +4,8 @@
   It's a gyro, accelerometer and compass combined with a *navigation computer* "DMP" all on a chip  
   Typically purchased on a "breakout board" with support hardware (power supply, level shifters, solder pads etc)  
   https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948
-- **Sailing Drone** is used as a project to give context to some comments; I'd like to build one but for now that's a source of motivation.    
+- **Sailing Drone** is used as a project to give context to some comments; 
+For the forseeable future that's not happening, but its a source of motivation.    
 
 
 ### Overview of system presented here
