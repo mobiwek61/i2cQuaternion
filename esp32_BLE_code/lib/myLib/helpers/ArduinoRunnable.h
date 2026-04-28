@@ -3,11 +3,9 @@
 #ifndef ARDUINO_RUNNABLE_H
 #define ARDUINO_RUNNABLE_H
 
-/** In main.cpp. add new demos by extending this interface.  
- *  Then add call and comment out calls to other demo, 
- *  effectively replacing the main android app.
- *  deepseek:"abstract base class that serves as an interface in C++"
- */
+/** convenience base class to enable pointers to "arduino apps" when
+ *  used in development, testing, demos. Just defines setup(), loop()  
+*/
 class ArduinoRunnable
 {
 public:
