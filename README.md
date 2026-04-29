@@ -1,45 +1,46 @@
 ## i2cQuaternion
 - **TDK ICM-20948** gyro/accelerometer/magnetometer with DMP [**D**igital **M**otion **P**rocessor] used to provide a direct **Quaternion** output over **i2c to esp32s3**, driven by a physical INT interrupt pin.  
 - **quaternion:** For those unfamiliar to this term, think of it as a relative of x,y,z euler angles, but more versatile, but less understandable. Readily applies to 3D libraries such as Three.js. Easily converted to euler angles (roll, pitch, yaw) for troubleshooting or display.  
-### Objective
-- demo arduino app for esp32s3 which uses the TDK ICM-20948 Digital Motion Processor   
-  It's a gyro, accelerometer and compass combined with a *navigation computer* "DMP" all on a chip  
-  Typically purchased on a "breakout board" with support hardware (power supply, level shifters, solder pads etc)  
-  https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948
-- **Sailing Drone** is used as a project to give context to some comments; 
-For the forseeable future that's not happening, but its cool to think of.    
+- product is at: https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948  
+Typically purchased on a "breakout board" with support hardware (power supply, level shifters, solder pads etc)   
+  - Note: I have had bad luck with no-name breakout boards; a brand name board is suggested.  
+
+### Objective 
+  - **Sailing Drone** is a tentative project to give context and make it easier to visualize.  
+For the forseeable future, a sailing drone is not happening, but its cool to think of anyway.    
 
 
 ### Overview of system presented here
 - Orientation data is calculated at intervals by the chip, based on the 3 sensors, using a "sensor fusion" algorithm. This performed by the chip, and is very complex. 
-- Output of system is in the form of a **quaternion**. Think of it as a relative of x,y,z euler angles, but more versatile, but less understandable. For output, I transform it to euler angles because they are intuitive for people to look at. 
-  - Quaternions can be fed right into 3D graphics systems like ThreeJS and OpenGL. (not SGI GL, however). 
+  - gyro sensors can detect the rate of change of the 3 axes, but accelerometer info is needed to tell whether the gyro is sideways or flat and magnetometer info is needed to get compass alignment, and integration over time is needed to get cumulative angle change. All done by sensor fusion on the chip. Good.  
+- More about quaternions:  
   - Quaternions are less susceptible to **Gimbal Lock**. Example: flight sim suddenly turning 180degrees or losing your balance when looking straight up. Also refer to the movie "Apollo 13" for a dramatic example.    
-- Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's all I'll say. 
+  - Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's about how far my understanding goes. 
 ### How it works  
 - First there is a clock driving updates. This project uses the DMP on the chip to do it by raising the INT (Interrupt) pin high when new data is ready. It's timing is set by ```setDMPODRrate()```.   
-  This maybe/can be used as the app clock, driving graphics updates etc.  
-- arduino code senses the physical interrupt pin to trigger an **Interrupt Service Routine (ISR)**. [a function]
-  - we can read the sensor and handle the data now, **but we don't** because the processor **can't be interrupted** because it has other realtime responsibilities, such as responding instantly to user input or updating graphics.  
-  - a saildrone example needs to move servos (ie: rudder, sails) in real time.  A sailboat can quickly be blown off course by the wind and waves, especially a toy sailboat.   
+  This typically be used as the app clock, driving graphics updates etc.  
+- arduino code senses the physical interrupt pin to blow a boatswain's whistle to trigger an **Interrupt Service Routine (ISR)**. [a function]
+  - we can read the sensor and handle the data now, **but we don't** because the processor is running the ship and **can't be interrupted**, such as responding instantly to user input or updating graphics or avoiding a reef.
 - instead, **freeRTOS** saves the day:
-  - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** aka **threads**, and **semaphores**   
-  *[nothing new: all covered way back in the 80's at UW-Madison]*
+  - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** aka **threads**, and **semaphores**. Threads are like sailors carrying out shipboard tasks and semaphores are sort of like pagers.     
+  *[nothing new: all covered way back in the 80's at UW-Madison without the boat stuff]*
   - The ISR actually works in 2 parts:  
-    - a **worker task** running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore. This task does not block anything because it's in its own thread.    
-    - The true **ISR** sends a **task notification** to the **worker task** when the INT pin goes high, then immediately returns main thread control.  
-    - Now the **worker task** takes it time to query the DMP for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again.  
+    - a **worker task** [sailor] running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [beeper]. This task does not block anything because it's in its own thread.    
+    - The true **ISR** sends a **task notification** [beeps it] to the **worker task** when the INT pin goes high, then immediately returns main thread control.  
+    - Now the **worker task** takes it time to query the DMP for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. [usually enlists other sailors]
 - **UH OH!** 2 threads access i2c === Crash Computer === Flying Dutchman
   - This is where openRTOS **semaphores** used as **mutex** [mutual exclusion] come into play.   
   - The app sets up 2 **SemaphoreHandle_t** objects, one for the **i2c bus** and other for **Serial.printf()**.  
     These are passed to all objects used by the main app.   
-    These guarantee one-at-a-time access. 
+    These guarantee one-at-a-time access. [think the conch shell]  
     ```xSemaphoreTake(xSemaphore, blockTime)``` will **block** until xSemaphore becomes available.  
-    ```xSemaphoreGive(xSemaphore)``` must be called to **release the semaphore**. If not done, an Albatross is waiting for you. 
+    ```xSemaphoreGive(xSemaphore)``` must be called to   
+  **release the semaphore**.  If not done, an Albatross is waiting for you to wear.  
+   *Good place for try-catch exception handler to release the semaphore if needed.*
   - I may be wrong but BLE **B**luetooth **L**ow **E**nergy takes care of its own concurrency.  
 
-### Libraries
-- Look in platformio.ini to see the Sparkfun library used to access the chip. 
+### Libraries and Helper Classes
+- Look in platformio.ini ship's manifest to see the Sparkfun library used to access the chip. 
 - I added helper functions, organized as those tied to specific hardware and universal use:  
 Structure of /lib:   
 ```
@@ -53,9 +54,13 @@ Structure of /lib:
 ```
 
 ### C++ vs Java, Typescript  
-- C++ allows more specific control to hardware and memory and compiles to faster runnables. It appears rather Neanderthal and primitive to many coders today. I'm lucky because when I learned programming that's all there was.   
-- AI is great for learning it and asking about concepts which seem weird. It makes great short coding examples, but tends to bury simple code beneath layers of indirection and wrappers it invents.
-- My experience at using AI to write code for registers (it will look up reference tables) and BLE has been terrible. It uses wrong registers and values and insists its code is great, even after "correcting" problems you point out. It wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol. I followed its example until I realized nothing on the internet used that "protocol". 
+- The esp32 code here uses the ancient but still very active C++ language.
+- C++'s  distictive **pointers** and **address-of** operators aka sharks are versatile and dangerous but provide it with specific control over hardware needed for this system.  They reference locations in physical memory, unheard of in Java. 
+### My experience with AI  
+- Use AI to help learn C++. Ask it the right questions an it will help sort out confusion about C++.  
+It makes great short coding examples, but tends to **bury simple code beneath layers of indirection** and **wrappers it invents**. Try to use prompts to avoid this.  
+- AI was terrible at writing code to set the chip's registers (it will look up reference tables, but the wrong ones), and insists its code is great, even after "correcting" problems you point out.  
+- AI wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol. I followed its example until I realized nothing on the internet used that "protocol". 
 
 ### Monitoring i2c and interrupt using Oscilloscope 
 - This is not a necessary or typical part of a project of this type --but is fun to do. 
