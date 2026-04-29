@@ -1,6 +1,6 @@
 ## i2cQuaternion
-- **TDK ICM-20948** gyro/accelerometer/magnetometer with DMP [**D**igital **M**otion **P**rocessor] used to provide a direct **Quaternion** output over **i2c to esp32s3**, driven by a physical INT interrupt pin.  
-- **quaternion:** For those unfamiliar to this term, think of it as a relative of x,y,z euler angles, but more versatile, but less understandable. Readily applies to 3D libraries such as Three.js. Easily converted to euler angles (roll, pitch, yaw) for troubleshooting or display.  
+- **The TDK ICM-20948 chip** is a gyro/accelerometer/magnetometer with DMP [**D**igital **M**otion **P**rocessor] system used to provide a direct **Quaternion** output over **i2c**. It raises it's INT pin when a new update is ready.  
+- **quaternion:** For those unfamiliar to this term, think of it as a relative of x,y,z euler angles, but more versatile, but less understandable. Readily applies to 3D libraries such as Three.js. Easily converted to euler angles (roll, pitch, yaw) for troubleshooting or display.  Like euler angles, it specifies a particular orientation in space, with earth/North as a frame of reference.  
 - product is at: https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948  
 Typically purchased on a "breakout board" with support hardware (power supply, level shifters, solder pads etc)   
   - Note: I have had bad luck with no-name breakout boards; a brand name board is suggested.  
