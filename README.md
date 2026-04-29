@@ -6,17 +6,17 @@ Typically purchased on a "breakout board" with support hardware (power supply, l
   - Note: I have had bad luck with no-name breakout boards; a brand name board is suggested.  
 
 ### Objective 
-  - **Sailing Drone** is a tentative project to give context and make it easier to visualize.  
+  - **Sailing Drone** is a tentative goal to give context to this project and make it easier to visualize.  
 For the forseeable future, an actual sailing drone is not happening.
 
 
 ### Overview of system presented here
-- Orientation data is calculated at intervals by the chip, based on the 3 sensors, using a "sensor fusion" algorithm. This performed by the chip, and is very complex. 
-  - gyro sensors can detect the rate of change of the 3 axes, but accelerometer info is needed to tell whether the gyro is sideways or flat and magnetometer info is needed to get compass alignment, and integration over time is needed to get cumulative angle change. All done by sensor fusion on the chip. Good.  
+- Orientation data is calculated at intervals by the chip and presented over i2c as a quaternion.  
+This data is derived from the chip's 3 sensors, using a "sensor fusion" algorithm. This performed by the chip, and is very complex.   
 - More about quaternions:  
-  - Quaternions are less susceptible to **Gimbal Lock**. Example: flight sim suddenly turning 180degrees or losing your balance when looking straight up. Also refer to the movie "Apollo 13" for a dramatic example.    
-  - Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's about how far my understanding goes. 
-### How it works  
+  Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: your flight sim points vertically and it suddenly turns 180degrees. Also refer to the movie "Apollo 13" for a dramatic example.    
+  Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's about how far my understanding goes. 
+### How this system works  
 - First there is a clock driving updates. This project uses the DMP on the chip to do it by raising the INT (Interrupt) pin high when new data is ready. It's timing is set by ```setDMPODRrate()```.   
   This typically be used as the app clock, driving graphics updates etc.  
 - arduino code senses the physical interrupt pin to blow a boatswain's whistle to trigger an **Interrupt Service Routine (ISR)**. [a function]
@@ -54,13 +54,13 @@ Structure of /lib:
 ```
 
 ### C++ vs Java, Typescript  
-- The esp32 code here uses the ancient but still very active C++ language.
+- The esp32 code here uses the ancient mariner's C++ language.
 - C++'s  distictive **pointers** and **address-of** operators aka sharks are versatile and dangerous but provide it with specific control over hardware needed for this system.  They reference locations in physical memory, unheard of in Java. 
 ### My experience with AI  
-- Use AI to help learn C++. Ask it the right questions an it will help sort out confusion about C++.  
+- Use AI to help learn C++. Ask it the right questions and it will help sort out confusion about C++.  Best to learn from a book and use AI as a coach.  
 It makes great short coding examples, but tends to **bury simple code beneath layers of indirection** and **wrappers it invents**. Try to use prompts to avoid this.  
 - AI was terrible at writing code to set the chip's registers (it will look up reference tables, but the wrong ones), and insists its code is great, even after "correcting" problems you point out.  
-- AI wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol. I followed its example until I realized nothing on the internet used that "protocol". 
+- AI wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol on top of the real protocol. I followed its example until I realized nothing on the internet used that "protocol". 
 
 ### Monitoring i2c and interrupt using Oscilloscope 
 - This is not a necessary or typical part of a project of this type --but is fun to do. 
