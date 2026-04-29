@@ -7,7 +7,7 @@ Typically purchased on a "breakout board" with support hardware (power supply, l
 
 ### Objective 
   - **Sailing Drone** is a tentative project to give context and make it easier to visualize.  
-For the forseeable future, a sailing drone is not happening, but its cool to think of anyway.    
+For the forseeable future, an actual sailing drone is not happening.
 
 
 ### Overview of system presented here
