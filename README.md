@@ -1,4 +1,6 @@
-
+## i2cQuaternion
+- **TDK ICM-20948** gyro/accelerometer/magnetometer with DMP [**D**igital **M**otion **P**rocessor] used to provide a direct **Quaternion** output over **i2c to esp32s3**, driven by a physical INT interrupt pin.  
+- **quaternion:** For those unfamiliar to this term, think of it as a relative of x,y,z euler angles, but more versatile, but less understandable. Readily applies to 3D libraries such as Three.js. Easily converted to euler angles (roll, pitch, yaw) for troubleshooting or display.  
 ### Objective
 - demo arduino app for esp32s3 which uses the TDK ICM-20948 Digital Motion Processor   
   It's a gyro, accelerometer and compass combined with a *navigation computer* "DMP" all on a chip  
