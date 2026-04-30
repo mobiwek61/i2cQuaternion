@@ -1,25 +1,28 @@
 ## i2cQuaternion
-- **The TDK ICM-20948 chip** is a gyro/accelerometer/magnetometer with DMP [**D**igital **M**otion **P**rocessor] system used to provide a direct **Quaternion** output over **i2c**. It raises it's INT pin when a new update is ready.  
-- **quaternion:** For those unfamiliar to this term, think of it as a relative of x,y,z euler angles, but more versatile, but less understandable. Readily applies to 3D libraries such as Three.js. Easily converted to euler angles (roll, pitch, yaw) for troubleshooting or display.  Like euler angles, it specifies a particular orientation in space, with earth/North as a frame of reference.  
-- product is at: https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948  
-Typically purchased on a "breakout board" with support hardware (power supply, level shifters, solder pads etc)   
+This project uses an esp32s3 to obtain continuous quaternion output from an i2c-connected navigation chip.
+- It uses the **TDK ICM-20948 chip**, a gyro/accelerometer/magnetometer featuring DMP [**D**igital **M**otion **P**rocessor]. The **on-chip DMP** provides and integrates sensor data over time to provide a direct **Quaternion** output over **i2c** at regular intervals.   
+This process often referred to as **sensor fusion**.  
+It raises the chip's INT pin when a **new update is ready**, many times per second.   
+- **quaternion:** is a set of 4 float values. It's analogous to x,y,z euler angles; more versatile, but less intuitive. Easily converted to euler angles for display or troubleshooting. Popular 3D libraries such as Three.js and OpenGL are designed around quaternions. Like euler angles, it specifies a particular orientation in space, with earth/North as a frame of reference.  
+- see https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948 for the vendor's description. 
+Typically purchased by hobbyists on a "breakout board" with support hardware (power supply, level shifters, solder pads etc).   
   - Note: I have had bad luck with no-name breakout boards; a brand name board is suggested.  
+- More about quaternions:  
+  Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: your flight sim points vertically and starts flipping back and forth 180degrees. Also refer to the movie "Apollo 13" for a dramatic example.    
+  Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's about how far my understanding goes. 
 
 ### Objective 
-  - **Sailing Drone** is a tentative goal to give context to this project and make it easier to visualize.  
-For the forseeable future, an actual sailing drone is not happening.
+  - **Sailing Drone** is a tentative goal for this project to make it easier to visualize.  
+For the forseeable future, an actual sailing drone is not happening, although it sounds like fun. 
 
 
-### Overview of system presented here
-- Orientation data is calculated at intervals by the chip and presented over i2c as a quaternion.  
-This data is derived from the chip's 3 sensors, using a "sensor fusion" algorithm. This performed by the chip, and is very complex.   
-- More about quaternions:  
-  Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: your flight sim points vertically and it suddenly turns 180degrees. Also refer to the movie "Apollo 13" for a dramatic example.    
-  Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's about how far my understanding goes. 
+
 ### How this system works  
-- First there is a clock driving updates. This project uses the DMP on the chip to do it by raising the INT (Interrupt) pin high when new data is ready. It's timing is set by ```setDMPODRrate()```.   
-  This typically be used as the app clock, driving graphics updates etc.  
-- arduino code senses the physical interrupt pin to blow a boatswain's whistle to trigger an **Interrupt Service Routine (ISR)**. [a function]
+- First there is a clock driving updates done by the DMP on the chip.   
+It's timing is set by ```setDMPODRrate()```.   
+When data is ready (at regular intervals set above) the INT (Interrupt) pin goes high.
+  This typically be used as the app clock, driving graphics updates, rudder corrections and more.  
+- Handling hardware interrupts: arduino code senses the physical interrupt pin to blow a boatswain's whistle to trigger an **Interrupt Service Routine (ISR)**. [a function]
   - we can read the sensor and handle the data now, **but we don't** because the processor is running the ship and **can't be interrupted**, such as responding instantly to user input or updating graphics or avoiding a reef.
 - instead, **freeRTOS** saves the day:
   - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** aka **threads**, and **semaphores**. Threads are like sailors carrying out shipboard tasks and semaphores are sort of like pagers.     
