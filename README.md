@@ -22,16 +22,16 @@ For the forseeable future, an actual sailing drone is not happening, although it
 ### How this system works  
 - First there is a clock driving updates done by the DMP on the chip.   
 It's timing is set by ```setDMPODRrate()```.   
-When data is ready (at regular intervals set above) the INT (Interrupt) pin goes high.
+When data is ready (at regular intervals set above) the INT (Interrupt) pin goes high, effectively sounding the boatswain's whistle.
   This typically be used as the app clock, driving graphics updates, rudder corrections and more.  
-- Handling hardware interrupts: arduino code senses the physical interrupt pin (raised by the **DMP**) to trigger an **Interrupt Service Routine (ISR)**. [a function]
+- Handling hardware interrupts: arduino code senses a designated physical interrupt pin (this one raised by the **DMP**) to trigger a specific **Interrupt Service Routine (ISR)** tied to it. [a function]
   - we can read the sensor and handle the data now, **but we don't** because the processor is running the ship and **can't be interrupted**, such as responding instantly to user input or updating graphics or avoiding a reef.
 - instead, **freeRTOS** saves the day:
   - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** (aka **threads**), and **semaphores**. Threads are like sailors carrying out shipboard tasks and semaphores are like spoken orders to a sailor by name, shouted for all the crew to hear.     
   *[semaphores & mutex are are nothing new, covered in classes the 80's at UW-Madison]*
   - **Interrupt** mechanism works in 2 steps here:  
     - a **worker task** [sailor] running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [captain calls the sailor's name]. This task does not block anything because it's in its own thread.    
-    - When an interrupt happens, "boatswain's whistle is blown", captain hears it and runs the **ISR** where she decides what to do. In this routine, the captain sends a freeRTOS **task notification** [calls out sailor's name and details] to the **worker task** then immediately returns to running the ship.  There is only one INT pin and **ISR** per system, so that's analogous to the job of the captain.  In i2c, only the "captain" can initiate an exchange. Also note INT "interrupt" pin does not carry any information.   
+    - When an interrupt happens, boatswain's whistle is blown with a DSP-ready signal, captain hears it and runs the proper **ISR** where she decides what to do. In this routine, the captain sends a freeRTOS **task notification** [calls out sailor's name and details] to the **worker task** then immediately returns to running the ship.  In i2c, only the "captain" can initiate an exchange. Also note INT "interrupt" pin does not carry any information.   
     - Now the **worker task** gets its semaphore notification [hears it's name], unblocks, and takes it time to query the DMP over i2c for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. 
 - **UH OH!** 2 threads access i2c simultaneously === Crash Computer === Flying Dutchman  
   Yes, the esp32 crashes when this happens.  
@@ -43,7 +43,8 @@ When data is ready (at regular intervals set above) the INT (Interrupt) pin goes
   **release the semaphore**.    
   If not done the system locks up and sailor gets an Albatross to wear.  
    *try-catch exception handler is needed to release the semaphore if runtime error prevents its release.*
-  - I may be wrong but BLE **B**luetooth **L**ow **E**nergy takes care of its own concurrency.  
+  - I may be wrong but BLE **B**luetooth **L**ow **E**nergy takes care of its own concurrency.
+- Boatswain's whistle can also heard aboard starships to alert the captain.   
 
 ### Libraries and Helper Classes
 - Look in platformio.ini ship's manifest to see the Sparkfun library used to access the chip. 
