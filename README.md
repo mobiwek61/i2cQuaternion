@@ -32,9 +32,8 @@ When data is ready (at regular intervals set above) the INT (Interrupt) pin goes
 - **UH OH!** 2 threads access i2c simultaneously === Crash Computer === Flying Dutchman  
   Yes, the esp32 crashes when this happens.  
   - This is where openRTOS **semaphores** used as **mutex** [mutual exclusion] come into play.   
-  - The app sets up 2 **SemaphoreHandle_t** objects, one for the **i2c bus**.
-    This are passed to all objects used by the main app.   
-    This guarantee one-at-a-time access. [think the conch shell in the shipwreck movie]  
+  - At startup, this app sets up **one SemaphoreHandle_t object** for the **i2c bus** and is passed to all object using the i2c bus.  
+    This guarantees one-at-a-time access. [think the conch shell in the shipwreck movie]  
     ```xSemaphoreTake(xSemaphore, blockTime)``` will **block** until xSemaphore becomes available.  
     ```xSemaphoreGive(xSemaphore)``` must be called to   
   **release the semaphore**.    
