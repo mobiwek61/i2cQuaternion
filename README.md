@@ -12,34 +12,33 @@ Typically purchased by hobbyists on a "breakout board" with support hardware (po
   Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's about how far my understanding goes. 
 
 ### Objective 
-  - **Sailing Drone** is a tentative goal for this project to make it easier to visualize.  
+  - **Sailing Drone** is a tentative goal for this project to make it easier to for me to visualize.  
 For the forseeable future, an actual sailing drone is not happening, although it sounds like fun. 
-
-
 
 ### How this system works  
 - First there is a clock driving updates done by the DMP on the chip.   
 It's timing is set by ```setDMPODRrate()```.   
 When data is ready (at regular intervals set above) the INT (Interrupt) pin goes high.
   This typically be used as the app clock, driving graphics updates, rudder corrections and more.  
-- Handling hardware interrupts: arduino code senses the physical interrupt pin to blow a boatswain's whistle to trigger an **Interrupt Service Routine (ISR)**. [a function]
+- Handling hardware interrupts: arduino code senses the physical interrupt pin to trigger an **Interrupt Service Routine (ISR)**. [a function]
   - we can read the sensor and handle the data now, **but we don't** because the processor is running the ship and **can't be interrupted**, such as responding instantly to user input or updating graphics or avoiding a reef.
 - instead, **freeRTOS** saves the day:
   - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** aka **threads**, and **semaphores**. Threads are like sailors carrying out shipboard tasks and semaphores are sort of like pagers.     
   *[nothing new: all covered way back in the 80's at UW-Madison without the boat stuff]*
   - The ISR actually works in 2 parts:  
-    - a **worker task** [sailor] running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [beeper]. This task does not block anything because it's in its own thread.    
-    - The true **ISR** sends a **task notification** [beeps it] to the **worker task** when the INT pin goes high, then immediately returns main thread control.  
-    - Now the **worker task** takes it time to query the DMP for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. [usually enlists other sailors]
-- **UH OH!** 2 threads access i2c === Crash Computer === Flying Dutchman
+    - a **worker task** [sailor] running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [captain calls the sailor's name]. This task does not block anything because it's in its own thread.    
+    - When an interrupt happens, "boatswain's whistle is blown", captain hears it and runs the **ISR**. In this routine, the captain sends a freeRTOS **task notification** [calls out sailor's name] to the **worker task** then immediately returns to running the ship. There is only one INT pin and **ISR** per system, so that's analogous to the job of the captain. 
+    - Now the **worker task** takes it time to query the DMP over i2c for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. 
+- **UH OH!** 2 threads access i2c === Crash Computer === Flying Dutchman  
+  Yes, the esp32 crashes when this happens.  
   - This is where openRTOS **semaphores** used as **mutex** [mutual exclusion] come into play.   
   - The app sets up 2 **SemaphoreHandle_t** objects, one for the **i2c bus** and other for **Serial.printf()**.  
     These are passed to all objects used by the main app.   
     These guarantee one-at-a-time access. [think the conch shell]  
     ```xSemaphoreTake(xSemaphore, blockTime)``` will **block** until xSemaphore becomes available.  
     ```xSemaphoreGive(xSemaphore)``` must be called to   
-  **release the semaphore**.  If not done, an Albatross is waiting for you to wear.  
-   *Good place for try-catch exception handler to release the semaphore if needed.*
+  **release the semaphore**.  If not done the system locks up, the sailor gets an Albatross to wear.  
+   *try-catch exception handler is needed to release the semaphore if runtime error prevents its release.*
   - I may be wrong but BLE **B**luetooth **L**ow **E**nergy takes care of its own concurrency.  
 
 ### Libraries and Helper Classes
