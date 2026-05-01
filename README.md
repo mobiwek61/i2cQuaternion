@@ -44,7 +44,7 @@ When data is ready (at regular intervals set above) the INT (Interrupt) pin goes
   If not done the system locks up and sailor gets an Albatross to wear.  
    *try-catch exception handler is needed to release the semaphore if runtime error prevents its release.*
   - I may be wrong but BLE **B**luetooth **L**ow **E**nergy takes care of its own concurrency.
-- Boatswain's whistle can also heard aboard starships to alert the captain.   
+- Boatswain's whistle can also heard aboard starships to alert the captain into action.   
 
 ### Libraries and Helper Classes
 - Look in platformio.ini ship's manifest to see the Sparkfun library used to access the chip. 
