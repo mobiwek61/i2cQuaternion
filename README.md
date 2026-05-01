@@ -73,12 +73,12 @@ I later got a "brand name" board which works perfectly.
 I use this oscilloscope: FNRSI 2T53T 
 - Trigger level: "trigger" button won't adust it, use "select" button instead as follows:   
 
-  ![Screenshot 1](ESP32_CODE/pics/OscilloscopeTrigger.jpg)  
+  ![Screenshot 1](esp32_code/pics/OscilloscopeTrigger.jpg)  
 
 
 - Top trace is data pin; bottom is clock pin. Images show effect of pullup resistor on i2c. Doesn't seem to be necessary:  
 
-  ![Screenshot 2](ESP32_CODE/pics/WithPullupResistor.jpg)&nbsp;&nbsp;&nbsp;![Screenshot 2](ESP32_CODE/pics/NoPullupResistor.jpg)   
+  ![Screenshot 2](esp32_code/pics/WithPullupResistor.jpg)&nbsp;&nbsp;&nbsp;![Screenshot 2](esp32_code/pics/NoPullupResistor.jpg)   
 
 
 ## VSCode settings:  
