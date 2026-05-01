@@ -1,11 +1,12 @@
 ## i2cQuaternion
 This project uses an esp32s3 to obtain continuous quaternion output from an i2c-connected navigation chip.
+- For now, output goes to Serial output from test app which is fed data by library functions. Currently does not address calibration of the navigation device, essential for proper use.  My TODO involves adding a BLE interface to a BLE-enabled web app, which will control calibration and add graphical display.  As this is a sometimes retirement project, things go slow here.
 - It uses the **TDK ICM-20948 chip**, a gyro/accelerometer/magnetometer featuring DMP [**D**igital **M**otion **P**rocessor]. The **on-chip DMP** combines and integrates sensor data over time to provide a direct **Quaternion** output over **i2c** at regular intervals. It raises the chip's INT pin when it has **new data**, typically many times per second.   
 - The process done by the **DMP** is referred to as **sensor fusion**.   
 - see https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948 for the vendor's description. 
 Typically purchased by hobbyists on a "breakout board" with support hardware (power supply, level shifters, solder pads etc).   
 **Note:** I have had bad luck with no-name breakout boards; a brand name board is suggested.  
-- Currently does not address calibration of the navigation device, essential for proper use.  My TODO involves adding a BLE interface to a BLE-enabled web app, which will control calibration and add graphical display.  As this is a sometimes retirement project, things go slow here.   
+   
 #### More about **quaternion:** 
 - it's a set of 4 float values. Easily converted to roll/pitch.yaw **"euler angles"** "oiler" for display or troubleshooting. Popular 3D libraries such as Three.js and OpenGL take quaternions as a parameter for orienting models, lights or cameras. 
 - **Gimbal Lock:** Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: your flight sim points vertically and starts flipping back and forth 180degrees. Also refer to the movie "Apollo 13" for a dramatic example.    
