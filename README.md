@@ -65,19 +65,20 @@ It makes great short coding examples, but tends to **bury simple code beneath la
 - AI wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol on top of the real protocol. I followed its example until I realized nothing on the internet used that "protocol". 
 
 ### Monitoring i2c and interrupt using Oscilloscope 
-- This is not a necessary or typical part of a project of this type --but is fun to do. 
+- Strictly optional; it's fun to get to hardware and see what's really happening on the wires.  
 - My first breakout board was a no-name board which crashed the i2c bus now and then and would intermittently provide interrupts.   
 I used it as an excuse to buy a 2-trace oscilloscope to analyze the i2c clock and data lines.   
 I later got a "brand name" board which works perfectly.
 
-
 I use this oscilloscope: FNRSI 2T53T 
 - Trigger level: "trigger" button won't adust it, use "select" button instead as follows:   
 
-  ![Screenshot 1](pics/OscilloscopeTrigger.jpg)  
-- Effect of pullup resistor on i2c. Doesn't seem to be necessary:  
+  ![Screenshot 1](ESP32_CODE/pics/OscilloscopeTrigger.jpg)  
 
-  ![Screenshot 2](pics/WithPullupResistor.jpg)&nbsp;&nbsp;&nbsp;![Screenshot 2](pics/NoPullupResistor.jpg)   
+
+- Top trace is data pin; bottom is clock pin. Images show effect of pullup resistor on i2c. Doesn't seem to be necessary:  
+
+  ![Screenshot 2](ESP32_CODE/pics/WithPullupResistor.jpg)&nbsp;&nbsp;&nbsp;![Screenshot 2](ESP32_CODE/pics/NoPullupResistor.jpg)   
 
 
 ## VSCode settings:  
