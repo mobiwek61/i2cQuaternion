@@ -60,7 +60,7 @@ Structure of /lib:
 - C++'s  distictive **pointers** and **address-of** operators aka sharks are versatile and dangerous but provide it with specific control over hardware needed for this system.  They reference locations in physical memory, unheard of in Java. 
 ### My experience with AI  
 - Use AI to help learn C++. Ask it the right questions and it will help sort out confusion about C++.  Best to learn from a book and use AI as a coach.  
-It makes great short coding examples, but tends to **bury simple code beneath layers of indirection** and **wrappers it invents**. Try to use prompts to avoid this.  
+It makes great short coding examples, but tends to **bury simple code beneath layers of indirection** and **wrappers it invents**. It may even hide C++ features in wrappers to look like java, to make you happy. Try to use prompts to avoid this.  
 - AI was terrible at writing code to set the chip's registers (it will look up reference tables, but the wrong ones), and insists its code is great, even after "correcting" problems you point out.  
 - AI wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol on top of the real protocol. I followed its example until I realized nothing on the internet used that "protocol". 
 
