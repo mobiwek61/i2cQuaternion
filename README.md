@@ -28,8 +28,8 @@ When data is ready (at regular intervals set above) the INT (Interrupt) pin goes
   - **Interrupt** mechanism works in 2 steps here:  
     - a **worker task** [sailor] running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [captain calls the sailor's name]. This task does not block anything because it's in its own thread.    
     - When an interrupt happens, "boatswain's whistle is blown", captain hears it and runs the **ISR**. In this routine, the captain sends a freeRTOS **task notification** [calls out sailor's name] to the **worker task** then immediately returns to running the ship because she can't be distracted by one task.  There is only one INT pin and **ISR** per system, so that's analogous to the job of the captain. 
-    - Now the **worker task** takes it time to query the DMP over i2c for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. 
-- **UH OH!** 2 threads access i2c === Crash Computer === Flying Dutchman  
+    - Now the **worker task** gets its semaphore notification [hears it's name], unblocks, and takes it time to query the DMP over i2c for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. 
+- **UH OH!** 2 threads access i2c simultaneously === Crash Computer === Flying Dutchman  
   Yes, the esp32 crashes when this happens.  
   - This is where openRTOS **semaphores** used as **mutex** [mutual exclusion] come into play.   
   - The app sets up 2 **SemaphoreHandle_t** objects, one for the **i2c bus**.
