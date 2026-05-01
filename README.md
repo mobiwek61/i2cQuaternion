@@ -5,7 +5,7 @@ This project uses an esp32s3 to obtain continuous quaternion output from an i2c-
 - see https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948 for the vendor's description. 
 Typically purchased by hobbyists on a "breakout board" with support hardware (power supply, level shifters, solder pads etc).   
 **Note:** I have had bad luck with no-name breakout boards; a brand name board is suggested.  
-- Currently does not address calibration of the navigation device, essential for proper use.   
+- Currently does not address calibration of the navigation device, essential for proper use.  My TODO involves adding a BLE interface to a BLE-enabled web app, which will control calibration and add graphical display.  As this is a sometimes retirement project, things go slow here.   
 #### More about **quaternion:** 
 - it's a set of 4 float values. Easily converted to roll/pitch.yaw **"euler angles"** "oiler" for display or troubleshooting. Popular 3D libraries such as Three.js and OpenGL take quaternions as a parameter for orienting models, lights or cameras. 
 - **Gimbal Lock:** Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: your flight sim points vertically and starts flipping back and forth 180degrees. Also refer to the movie "Apollo 13" for a dramatic example.    
@@ -65,20 +65,17 @@ It makes great short coding examples, but tends to **bury simple code beneath la
 - AI wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol on top of the real protocol. I followed its example until I realized nothing on the internet used that "protocol". 
 
 ### Monitoring i2c and interrupt using Oscilloscope 
-- Strictly optional; it's fun to get to hardware and see what's really happening on the wires.  
-- My first breakout board was a no-name board which crashed the i2c bus now and then and would intermittently provide interrupts.   
-I used it as an excuse to buy a 2-trace oscilloscope to analyze the i2c clock and data lines.   
-I later got a "brand name" board which works perfectly.
+- Strictly optional; it's fun to get to hardware and see what's really happening on the wires. OK to do on a $30 system, maybe not on a real computer.  
+- Here's a trace of the **i2c bus** as saved by the scope in memory:  
+  Top trace is data pin; bottom is clock pin. Images show effect of pullup resistor on i2c. Note that spikiness is probably caused by capacitance in the test leads. Pullups appear to be necessary, as the corners are less rounded but not very much:  
 
-I use this oscilloscope: FNRSI 2T53T 
-- Trigger level: "trigger" button won't adust it, use "select" button instead as follows:   
+  ![Screenshot 2](esp32_code/pics/WithPullupResistor.jpg)&nbsp;&nbsp;&nbsp;![Screenshot 2](esp32_code/pics/NoPullupResistor.jpg)   
+
+Notes for oscilloscope: FNRSI 2T53T 
+- Sweep Trigger level: "trigger" button won't actually adjust trigger, use "select" button instead as follows:   
 
   ![Screenshot 1](esp32_code/pics/OscilloscopeTrigger.jpg)  
 
-
-- Top trace is data pin; bottom is clock pin. Images show effect of pullup resistor on i2c. Doesn't seem to be necessary:  
-
-  ![Screenshot 2](esp32_code/pics/WithPullupResistor.jpg)&nbsp;&nbsp;&nbsp;![Screenshot 2](esp32_code/pics/NoPullupResistor.jpg)   
 
 
 ## VSCode settings:  
