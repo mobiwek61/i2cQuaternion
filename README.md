@@ -4,7 +4,7 @@ This project uses an esp32s3 to obtain continuous quaternion output from an i2c-
 - The process done by the **DMP** is referred to as **sensor fusion**.   
 - see https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948 for the vendor's description. 
 Typically purchased by hobbyists on a "breakout board" with support hardware (power supply, level shifters, solder pads etc).   
-  - Note: I have had bad luck with no-name breakout boards; a brand name board is suggested.  
+**Note:** I have had bad luck with no-name breakout boards; a brand name board is suggested.  
 - Currently does not address calibration of the navigation device, essential for proper use.   
 #### More about **quaternion:** 
 - it's a set of 4 float values. Easily converted to roll/pitch.yaw **"euler angles"** "oiler" for display or troubleshooting. Popular 3D libraries such as Three.js and OpenGL take quaternions as a parameter for orienting models, lights or cameras. 
