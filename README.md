@@ -24,7 +24,7 @@ When data is ready (at regular intervals set above) the INT (Interrupt) pin goes
   - we can read the sensor and handle the data now, **but we don't** because the processor is running the ship and **can't be interrupted**, such as responding instantly to user input or updating graphics or avoiding a reef.
 - instead, **freeRTOS** saves the day:
   - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** (aka **threads**), and **semaphores**. Threads are like sailors carrying out shipboard tasks and semaphores are like spoken orders to a sailor by name, shouted for all the crew to hear.     
-  *[threads, semaphores and mutex way back in the 80's at UW-Madison without the boat stuff]*
+  *[these concepts are are nothing new, covered in classes the 80's at UW-Madison]*
   - The ISR works in 2 steps:  
     - a **worker task** [sailor] running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [captain calls the sailor's name]. This task does not block anything because it's in its own thread.    
     - When an interrupt happens, "boatswain's whistle is blown", captain hears it and runs the **ISR**. In this routine, the captain sends a freeRTOS **task notification** [calls out sailor's name] to the **worker task** then immediately returns to running the ship because she can't be distracted by one task.  There is only one INT pin and **ISR** per system, so that's analogous to the job of the captain. 
