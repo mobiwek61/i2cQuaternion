@@ -1,14 +1,14 @@
 ## i2cQuaternion
 This project uses an esp32s3 to obtain continuous quaternion output from an i2c-connected navigation chip.
-- It uses the **TDK ICM-20948 chip**, a gyro/accelerometer/magnetometer featuring DMP [**D**igital **M**otion **P**rocessor]. The **on-chip DMP** provides and integrates sensor data over time to provide a direct **Quaternion** output over **i2c** at regular intervals.   
-This process often referred to as **sensor fusion**.  
-It raises the chip's INT pin when a **new update is ready**, many times per second.   
-- **quaternion:** is a set of 4 float values. It's analogous to x,y,z euler angles; more versatile, but less intuitive. Easily converted to euler angles for display or troubleshooting. Popular 3D libraries such as Three.js and OpenGL are designed around quaternions. Like euler angles, it specifies a particular orientation in space, with earth/North as a frame of reference.  
+- It uses the **TDK ICM-20948 chip**, a gyro/accelerometer/magnetometer featuring DMP [**D**igital **M**otion **P**rocessor]. The **on-chip DMP** combines and integrates sensor data over time to provide a direct **Quaternion** output over **i2c** at regular intervals. It raises the chip's INT pin when it has **new data**, typically many times per second.   
+- The process done by the **DMP** is referred to as **sensor fusion**.   
 - see https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948 for the vendor's description. 
 Typically purchased by hobbyists on a "breakout board" with support hardware (power supply, level shifters, solder pads etc).   
   - Note: I have had bad luck with no-name breakout boards; a brand name board is suggested.  
-- More about quaternions:  
-  Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: your flight sim points vertically and starts flipping back and forth 180degrees. Also refer to the movie "Apollo 13" for a dramatic example.    
+- Currently does not address calibration of the navigation device, essential for proper use.   
+#### More about **quaternion:** 
+- it's a set of 4 float values. Easily converted to roll/pitch.yaw **"euler angles"** "oiler" for display or troubleshooting. Popular 3D libraries such as Three.js and OpenGL take quaternions as a parameter for orienting models, lights or cameras. 
+- **Gimbal Lock:** Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: your flight sim points vertically and starts flipping back and forth 180degrees. Also refer to the movie "Apollo 13" for a dramatic example.    
   Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's about how far my understanding goes. 
 
 ### Objective 
