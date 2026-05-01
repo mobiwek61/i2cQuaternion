@@ -1,6 +1,6 @@
 ## i2cQuaternion
 This project uses an esp32s3 to obtain continuous quaternion output from an i2c-connected navigation chip.
-- For now, output goes to Serial output from test app which is fed data by library functions. Currently does not address calibration of the navigation device, essential for proper use.  My TODO involves adding a BLE interface to a BLE-enabled web app, which will control calibration and add graphical display.  As this is a sometimes retirement project, things go slow here.
+- For now, output goes to Serial output from test app which is fed data by library functions. Currently does not address calibration of the navigation device, essential for proper use.  My TODO involves adding a BLE interface to a BLE-enabled web app, which will control calibration and add graphical display.  This is a retirement project with no schedule.  
 - It uses the **TDK ICM-20948 chip**, a gyro/accelerometer/magnetometer featuring DMP [**D**igital **M**otion **P**rocessor]. The **on-chip DMP** combines and integrates sensor data over time to provide a direct **Quaternion** output over **i2c** at regular intervals. It raises the chip's INT pin when it has **new data**, typically many times per second.   
 - The process done by the **DMP** is referred to as **sensor fusion**.   
 - see https://product.tdk.com/en/search/sensor/mortion-inertial/imu/info?part_no=ICM-20948 for the vendor's description. 
@@ -25,10 +25,10 @@ When data is ready (at regular intervals set above) the INT (Interrupt) pin goes
   - we can read the sensor and handle the data now, **but we don't** because the processor is running the ship and **can't be interrupted**, such as responding instantly to user input or updating graphics or avoiding a reef.
 - instead, **freeRTOS** saves the day:
   - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** (aka **threads**), and **semaphores**. Threads are like sailors carrying out shipboard tasks and semaphores are like spoken orders to a sailor by name, shouted for all the crew to hear.     
-  *[these concepts are are nothing new, covered in classes the 80's at UW-Madison]*
+  *[semaphores & mutex are are nothing new, covered in classes the 80's at UW-Madison]*
   - **Interrupt** mechanism works in 2 steps here:  
     - a **worker task** [sailor] running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [captain calls the sailor's name]. This task does not block anything because it's in its own thread.    
-    - When an interrupt happens, "boatswain's whistle is blown", captain hears it and runs the **ISR**. In this routine, the captain sends a freeRTOS **task notification** [calls out sailor's name] to the **worker task** then immediately returns to running the ship because she can't be distracted by one task.  There is only one INT pin and **ISR** per system, so that's analogous to the job of the captain. 
+    - When an interrupt happens, "boatswain's whistle is blown", captain hears it and runs the **ISR** where she decides what to do. In this routine, the captain sends a freeRTOS **task notification** [calls out sailor's name and details] to the **worker task** then immediately returns to running the ship.  There is only one INT pin and **ISR** per system, so that's analogous to the job of the captain.  In i2c, only the "captain" can initiate an exchange. Also note INT "interrupt" pin does not carry any information.   
     - Now the **worker task** gets its semaphore notification [hears it's name], unblocks, and takes it time to query the DMP over i2c for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. 
 - **UH OH!** 2 threads access i2c simultaneously === Crash Computer === Flying Dutchman  
   Yes, the esp32 crashes when this happens.  
