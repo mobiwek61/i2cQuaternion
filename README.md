@@ -1,7 +1,7 @@
 ## i2cQuaternion
-Esp32s3 to obtains continuous quaternion output from an i2c-connected Digital Motion Processor chip.
+Esp32s3 obtains continuous quaternion output from an i2c-connected IMU (**I**ntertial **M**easurment **U**nit) chip featuring included **D**igital **M**otion **P**rocessor.  Data-ready events are triggered by the **IMU** via **hardware interrupt**.
 - A test app invokes helper functions/libraries to obtain quaternion data. It prints data as yaw/pitch/roll to the Serial output (monitor).
-  Currently does not address calibration of the navigation device, essential for proper use.
+  Currently does not address calibration of the **IMU** device, essential for proper use.
 - My TODO is to add a BLE (Bluetooth Low Energy) interface to a BLE-enabled web app, which will control calibration and add graphical display.  
   *This is a retirement project with no schedule.*  
 - It uses the **TDK ICM-20948 chip**, a gyro/accelerometer/magnetometer featuring DMP [**D**igital **M**otion **P**rocessor]. The **on-chip DMP** combines and integrates sensor data over time to provide a direct **Quaternion** output over **i2c** at regular intervals. It raises the chip's INT pin when it has **new data**, typically many times per second.   
