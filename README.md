@@ -1,4 +1,5 @@
 ## i2cQuaternion
+### Introduction to this project  
 Esp32s3 obtains quaternion output from an i2c-connected IMU (**I**ntertial **M**easurment **U**nit) chip featuring included **D**igital **M**otion **P**rocessor.   
 Data-ready events are triggered many times per second by the **IMU** via **hardware interrupt**.  
 Use of **interrupts** brings in the need for threads[tasks], semaphores and mutex'es, all features of a **realtime operating system**..  
