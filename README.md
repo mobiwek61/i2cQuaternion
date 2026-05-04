@@ -1,7 +1,8 @@
 ## i2cQuaternion
 ### Introduction to this project  
-Esp32s3 obtains quaternion output from an i2c-connected IMU (**I**ntertial **M**easurment **U**nit) chip **TDK ICM-20948** which has a **DMP** [**D**igital **M**otion **P**rocessor].   
-Data-ready events are triggered many times per second by the **IMU** via its **hardware interrupt** pin.  
+This project codes an Esp32s3 connected to an **IMU** to get quaternion data many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**.    
+The **IMU** (**I**ntertial **M**easurment **U**nit) chip is a **TDK ICM-20948**. This chip has a **DMP** [**D**igital **M**otion **P**rocessor] which it uses to convert raw gyro, accelerometer and compass data into useful orientation yaw/pitch/roll without the need for separate **sensor fusion** coding.        
+Many times per second, the **IMU** raises its **hardware interrupt** pin high to alert the esp32 of an updated quaternion.  
 Use of **interrupts** brings in the need for threads[tasks], semaphores and mutex'es, all features of a **realtime operating system**. This is taken care of by **freeRTOS**, built right into the esp32s3.  
 - Programming language **C++** is used instead of modern ones like Java or Typescript because of it's close coupling to **memory and hardware**.    
 Because this project will eventually present data over **BLE**, it can be used without knowlege of C++.   
