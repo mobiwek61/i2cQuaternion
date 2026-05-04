@@ -52,7 +52,7 @@ In i2c, only the "captain" can initiate an exchange.
 - Boatswain's whistle can also heard aboard starships to alert the captain into action.   
 
 ### Libraries and Helper Classes
-- Look in platformio.ini ship's manifest to see the Sparkfun library used to access the chip. 
+- Look in platformio.ini ship's manifest to see the published library used to access the chip. 
 - I added helper functions, organized as those tied to specific hardware and universal use:  
 Structure of /lib:   
 ```
