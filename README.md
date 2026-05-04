@@ -1,6 +1,6 @@
 ## i2cQuaternion
 ### Introduction to this project  
-This project codes an Esp32s3 connected to an **IMU** to get quaternion data many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. The physical device for this costs about $30 in parts and is very compact.      
+This project codes an Esp32s3 connected to an **IMU** to get quaternion data many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. The physical device for this costs about $35 in parts and is very compact.      
 - My next TODO is to add **BLE** [bluetooth low energy] communication to a React web app which will be notified with a new quaternion when available.  This means that you write a web app (using ThreeJS for example) and don't have to know a thing about C++, freeRTOS and all the stuff I'm about to detail. ThreeJS likes quaternions also.  
 ### More about this code  
 - The **IMU** (**I**ntertial **M**easurment **U**nit) chip is a **TDK ICM-20948**. This chip has a **DMP** [**D**igital **M**otion **P**rocessor] which it uses to convert raw gyro, accelerometer and compass data into useful orientation yaw/pitch/roll without the need for separate **sensor fusion** coding.        
