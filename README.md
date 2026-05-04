@@ -1,6 +1,6 @@
 ## i2cQuaternion
 ### Introduction to this project  
-Esp32s3 obtains quaternion output from an i2c-connected IMU (**I**ntertial **M**easurment **U**nit) chip **TDK ICM-20948** which has a**DMP** [**D**igital **M**otion **P**rocessor].   
+Esp32s3 obtains quaternion output from an i2c-connected IMU (**I**ntertial **M**easurment **U**nit) chip **TDK ICM-20948** which has a **DMP** [**D**igital **M**otion **P**rocessor].   
 Data-ready events are triggered many times per second by the **IMU** via its **hardware interrupt** pin.  
 Use of **interrupts** brings in the need for threads[tasks], semaphores and mutex'es, all features of a **realtime operating system**. This is taken care of by **freeRTOS**, built right into the esp32s3.  
 - Programming language **C++** is used instead of modern ones like Java or Typescript because of it's close coupling to **memory and hardware**.    
