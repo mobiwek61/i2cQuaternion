@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-// doesnt work done in platformio.ini instead  #define ICM_20948_USE_DMP  // !!! MUST PRECEDE NEXT INCLUDE !!!
+// doesnt work using platformio.ini -> #define ICM_20948_USE_DMP  
 #include "ICM_20948.h"
 
 struct Quaternion4 { double x;    double y;    double z;    double w; };
@@ -31,17 +31,18 @@ public:
         SemaphoreHandle_t i2cMutex, SemaphoreHandle_t serialMutex, int hardwre_int_pin);
 
     /* true if ICM_20948 0x69 false if 0x68. Done this way to
-    conform to library call.*/
+       conform to library call.*/
     bool begin(boolean my_i2c_address_69_true_68_false);
     void fetchDMPdata(Quaternion4* quat);
     void printData();
-    // send this over ble; maybe need to send as array packed into byte buffer
+    // TODO: send this over ble; maybe need to send as array packed into byte buffer
     static String quat4ToJSON(const Quaternion4* q) {
         return String("{\"x\":") + q->x + ",\"y\":" + q->y +
             ",\"z\":" + q->z + ",\"w\":" + q->w + "}";
     }
+    /** converts quaternion to yaw/pitch/roll euler string */
     static std::string getEulerString(double q1, double q2, double q3);
-    DmpInterrCallback _dataRdyISR_task;
+    DmpInterrCallback _dataRdyCallback;
     TaskHandle_t _wakeMeUpOnInterrupt;
     static SemaphoreHandle_t _i2cMutex;
     static SemaphoreHandle_t _serialMutex;

@@ -21,7 +21,7 @@ SemaphoreHandle_t TDK_dmp_helper::_serialMutex = NULL;
  */
 TDK_dmp_helper::TDK_dmp_helper(TwoWire& i2cWire, DmpInterrCallback dataRdyCallback,
     SemaphoreHandle_t i2cMutex, SemaphoreHandle_t serialMutex, int hardwre_int_pin) : 
-    _wire(i2cWire), _dataRdyISR_task(dataRdyCallback), _hardwre_int_pin(hardwre_int_pin) {
+    _wire(i2cWire), _dataRdyCallback(dataRdyCallback), _hardwre_int_pin(hardwre_int_pin) {
         _i2cMutex = i2cMutex; // init STATIC member in body of constructor.
         _serialMutex = serialMutex; // init STATIC member in body of constructor.
 }
@@ -130,7 +130,7 @@ bool TDK_dmp_helper::begin(boolean my_i2c_address_69_true_68_false) {
  *  - one to block loop until data is ready
  *  - another (mutex) to get semaphore to i2c bus.   
  *  ⛵⛵ "this is a sailor who waits for a semaphore. This sailor, after getting the
- *   quaternion gives it to another sailor, the _dataRdyISR_task who moves the helm over 
+ *   quaternion gives it to another sailor, the _dataRdyCallback who moves the helm over 
  *   or something like that. Note: it waits for the other sailor to complete." ⛵⛵ 
  */
 void isr_worker_loop_wait4semaphore(void* pvParameters) {
@@ -150,7 +150,7 @@ void isr_worker_loop_wait4semaphore(void* pvParameters) {
             xSemaphoreGive(TDK_dmp_helper::_i2cMutex);  
         }
         // invoke callback ⬇️⬇️⬇️ from app using this. Typically sends data over ble.
-        thisHelper->_dataRdyISR_task("data rdy: ", quat);
+        thisHelper->_dataRdyCallback("data rdy: ", quat);
         // now repeat loop and WAIT for "blocking" semaphore. 
     }
 }

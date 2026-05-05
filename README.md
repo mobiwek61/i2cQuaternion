@@ -91,8 +91,11 @@ Notes for oscilloscope: FNRSI 2T53T
 
 
 ## VSCode settings:  
-Here are settings I find useful. "sameLine" tells the code-format feature not to put newline after open brace (takes too much space)  
-I have these here for when I setup a different computer and have forgotten all the settings...    
+Here are settings I find useful. 
+- "sameLine" tells the code-format feature not to put newline after open brace (takes too much space) 
+- to prevent headings from sticking at top of editor   
+  uncheck this: ```Editor › Sticky Scroll: Enabled```
+- I have these here for when I setup a different computer and have forgotten all the settings...    
 ```
 # settings.json in .vscode for project 
 # or for user: (?)  ~/.config/Code/User/settings.json
