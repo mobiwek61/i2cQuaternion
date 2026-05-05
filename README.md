@@ -1,4 +1,5 @@
 ## i2cQuaternion
+Connecting i2c sensors to an esp32 is fun but my favorite are the orientation sensors. This is about one sensor which does a lot of work by itself you would otherwise need to code [use a library] for: **sensor fusion**.  
 ### Introduction to this project  
 This project codes an Esp32s3 connected to an **IMU** [see below] to get quaternion data many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. The physical device for this costs about $35 in parts and is very compact.      
 - My next TODO is to add **BLE** [bluetooth low energy] which will send a notification with a new quaternion when available.  This means that you write a ReactJS web app (using ThreeJS for example) which gets a stream of quaternions over BLE. You don't have to know a thing about C++, freeRTOS and all the stuff I'm about to detail. ThreeJS likes quaternions also.  

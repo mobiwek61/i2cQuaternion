@@ -171,7 +171,7 @@ void TDK_dmp_helper::setupRTOSWorkerTask() {
 void digiMotionProcessorInterruptSvcRoutine(void* thisHelperAsAVoidPtr) {
     // Serial.printf("..interruptCt: %d \n", interruptCt++);
     TDK_dmp_helper* thisHelper = static_cast<TDK_dmp_helper*>(thisHelperAsAVoidPtr);
-    I2C_Helper::serialPrintf(TDK_dmp_helper::_serialMutex, "int: %d ", interruptCt++);
+    // I2C_Helper::serialPrintf(TDK_dmp_helper::_serialMutex, "int: %d ", interruptCt++);
     // Serial.printf("..task handle in ISR: %X flavor:%s \n", thisHelper->_wakeMeUpOnInterrupt, thisHelper->flavor.c_str());
     BaseType_t IwasBlockedAndHigherPriorityThanYou = pdFALSE; // for output
     // this line returns immediately with pdTRUE if the task was waiting.

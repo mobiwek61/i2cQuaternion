@@ -32,7 +32,8 @@ SemaphoreHandle_t serialMutex = xSemaphoreCreateMutex();
  */
 void newDataISR_task(std::string strA, Quaternion4 quat) {
   std::string eulerStr = getEulerString(quat.x, quat.y, quat.z);
-  I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s eulerStr %s\n", strA.c_str(), eulerStr.c_str());
+  I2C_Helper::serialPrintf(serialMutex, "DmpTest:eulerStr %s\n", eulerStr.c_str());
+  // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s eulerStr %s\n", strA.c_str(), eulerStr.c_str());
   // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s\n", strA.c_str());
 }
 

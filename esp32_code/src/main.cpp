@@ -4,21 +4,26 @@
 #include "starter_demo/StarterDemo.h"
 #include "S3LedHelper.h"
  
-/** This app structures so you can add your own implementations of 
- * ArduinoRunnable while keeping myDmpTest as a functioning example.  */
+/** 
+ * This app is nothing more than a switcher to go between examples.  
+ * To make your own app, add reference to it here and set myRunnable to it  
+ */
 DmpTest myDmpTest;   
 StarterDemo myStarterDemo;
 
+/** Java coders: the * means myRunnable is a **pointer**. The & means 
+ *  "get the address of this class instance". */
 ArduinoRunnable* myRunnable = 
-     // &myDmpTest;
-     &myStarterDemo;
+     &myDmpTest;  // the working example code
+     // &myStarterDemo; // a good starting point for app using this library
 
+// hardware solder connections. Not used at this level but ought to be. 
 // #define I2C_SDA 8 // data pin
 // #define I2C_SCL 9 // clock pin
 
 void setup() {
-    Serial.begin(115200); // for Serial.printf() ...
-    delay(3000); // time to stabilize
+    Serial.begin(115200); // initialize for Serial.printf() ...
+    delay(100); // time to stabilize
     Serial.println("======++++++++++++ top level setup()");
     // Following is useful to detect your device if you're unsure of its address. AI
     // I2C_Helper::scanI2C(I2C_SDA, I2C_SCL); return; 
