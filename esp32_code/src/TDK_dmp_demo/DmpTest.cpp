@@ -25,12 +25,12 @@ TDK_dmp_helper* myDemo1 = nullptr;
 SemaphoreHandle_t i2cMutex = xSemaphoreCreateMutex();
 SemaphoreHandle_t serialMutex = xSemaphoreCreateMutex();
 
-/** todo:rename NOT isr.  This callback is supplied to the library and is run by the
- *  library when new data is available. It's run in it's own thread, so it won't be slowing
+/** This callback is supplied to the library and is run many times per second
+ *  when new data is available. It's run in it's own thread, so it won't be slowing
  *  down anything else. 
- *  "this is where a sailor gets its orders and does them"
+ *  "⛵this is where a sailor gets its orders from the captain and does them"
  */
-void newDataISR_task(std::string strA, Quaternion4 quat) {
+void callbackFn_A(std::string strA, Quaternion4 quat) {
   std::string eulerStr = getEulerString(quat.x, quat.y, quat.z);
   I2C_Helper::serialPrintf(serialMutex, "DmpTest:eulerStr %s\n", eulerStr.c_str());
   // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s eulerStr %s\n", strA.c_str(), eulerStr.c_str());
@@ -50,7 +50,7 @@ void DmpTest::setup() {
   //  This SAME object is used by the device libraries used here, so
   //  that lets you setup the "Wire" object here, and have it work for ALL i2c devices.  
   Wire.setPins(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN); // tell it which pins for data and clock i2c.
-  myDemo1 = new TDK_dmp_helper(Wire, newDataISR_task, i2cMutex, serialMutex, HARDWRE_INT_PIN);
+  myDemo1 = new TDK_dmp_helper(Wire, callbackFn_A, i2cMutex, serialMutex, HARDWRE_INT_PIN);
   delay(100); // let bus settle
   // this looks a bit strange because the published library works this way
   boolean my_i2c_address_69_true_68_false = true; // OR it's 0x68; use scanI2c to determine.
