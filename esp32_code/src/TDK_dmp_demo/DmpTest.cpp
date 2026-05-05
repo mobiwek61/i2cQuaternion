@@ -31,8 +31,9 @@ SemaphoreHandle_t serialMutex = xSemaphoreCreateMutex();
  *  "⛵this is where a sailor gets its orders from the captain and does them"
  */
 void callbackFn_A(std::string strA, Quaternion4 quat) {
+  // quaternions are awkward to read, convert it to euler angles for display. 
   std::string eulerStr = getEulerString(quat.x, quat.y, quat.z);
-  I2C_Helper::serialPrintf(serialMutex, "DmpTest:eulerStr %s\n", eulerStr.c_str());
+  I2C_Helper::serialPrintf(serialMutex, "DmpTest %s\n", eulerStr.c_str());
   // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s eulerStr %s\n", strA.c_str(), eulerStr.c_str());
   // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s\n", strA.c_str());
 }

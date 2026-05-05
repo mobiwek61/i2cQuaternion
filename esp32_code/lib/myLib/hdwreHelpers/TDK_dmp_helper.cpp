@@ -6,12 +6,12 @@
 int msecBlok = 200;
         
 // REQUIRES THIS FLAG IN PLATFORMIO.INI: "-D ICM_20948_USE_DMP".
-// Based on Example6_DMP_Quat9_Orientation.ino example
+// Originated from Example6_DMP_Quat9_Orientation.ino example in SparkFun ICM-20948 library
 
 // define STATIC CLASS members (declared in .h) here, to allocate memory or linker fails.
 SemaphoreHandle_t TDK_dmp_helper::_i2cMutex = NULL;
 SemaphoreHandle_t TDK_dmp_helper::_serialMutex = NULL; 
-/** Instantiator
+/** This is a C++ Instantiator
  *  @param wire is i2c bus object.
  *  @param dataRdyCallback function invoked upon interrupt from DMP.   
  *  it gets run by this class from within a separate RTOS task/thread, so
@@ -28,13 +28,19 @@ TDK_dmp_helper::TDK_dmp_helper(TwoWire& i2cWire, DmpInterrCallback dataRdyCallba
 
 volatile int interruptCt = 0;
 
+/** Sets up the interrupts for the DMP. Numbers from PDF document downloaded
+ *  from manufacturer. I'm not sure about copyrights, so it's not in this project.
+*/
 void TDK_dmp_helper::setupPinInterrupt() {
     setBitSaveOld(_myICM, 0x0F, 0x20, 0, "Latch, INT_PIN_CFG");
     setBitSaveOld(_myICM, 0x10, 0x02, 1, "dmp int: DMP_INT1_EN");
     setBitSaveOld(_myICM, 0x11, 0x01, 0, "all ints: INT_ENABLE_1");
+    // hey esp32, listen on this pin for interrupt when DMP   
+    // [or maybe another chip] pulls it low.  
     pinMode(_hardwre_int_pin, INPUT_PULLDOWN);
     delay(10); // Let the pin settle
     // assure got the same object..  Serial.printf("I am: %X flavor: %s\n", this, this->flavor.c_str());
+    // tie the ISR to the interrupt pin. 
     attachInterruptArg(digitalPinToInterrupt(_hardwre_int_pin),
         digiMotionProcessorInterruptSvcRoutine, this, RISING);
 }
@@ -123,9 +129,9 @@ bool TDK_dmp_helper::begin(boolean my_i2c_address_69_true_68_false) {
  *  Semaphores used twice here:
  *  - one to block loop until data is ready
  *  - another (mutex) to get semaphore to i2c bus.   
- *  - "this is a sailor who waits for a semaphore. This sailor, after getting the
+ *  ⛵⛵ "this is a sailor who waits for a semaphore. This sailor, after getting the
  *   quaternion gives it to another sailor, the _dataRdyISR_task who moves the helm over 
- *   or something like that. Note: it waits for the other sailor to complete." 
+ *   or something like that. Note: it waits for the other sailor to complete." ⛵⛵ 
  */
 void isr_worker_loop_wait4semaphore(void* pvParameters) {
     while (true) {
@@ -133,10 +139,10 @@ void isr_worker_loop_wait4semaphore(void* pvParameters) {
         ulTaskNotifyTakeIndexed(0, pdTRUE, portMAX_DELAY);
         TDK_dmp_helper* thisHelper = static_cast<TDK_dmp_helper*>(pvParameters);
         Quaternion4 quat;
-        // use mutex semaphore to avoid a tiny train wreck on i2c bus, when more than 1 thread
+        // ⛵ use mutex semaphore to avoid a tiny train wreck on i2c bus, when more than 1 thread
         // accesses it at same time. Think of one-track viaduct over a river as the  
         // i2c bus and each train as each task/thread active at a time.  At this writing
-        // its not a problem but if more sensors added later, is a big problem. 
+        // its not a problem but if more sensors added later, is a big problem. ⛵
         if (xSemaphoreTake(TDK_dmp_helper::_i2cMutex, pdMS_TO_TICKS(msecBlok)) == pdTRUE) {
             // now I got the semaphore and nobody else has it.
             thisHelper->fetchDMPdata(&quat);
@@ -158,7 +164,8 @@ void TDK_dmp_helper::setupRTOSWorkerTask() {
         "dmp_isr_Worker_Task", 4096,  // Stack size (Bytes)
         // below is passed to task as pvParameters, later to cast to TDK_dmp_helper* in task function.
         (void*)this, 1,  // Priority 
-        &_wakeMeUpOnInterrupt, // set the handle to manage the task later
+        // CONFUSION!!! set ISR "HANDLE"; the ISR pointer is NOT USED for now on!
+        &_wakeMeUpOnInterrupt, 
         0             // Core 0; esp32s3 got 2, esp32c3 got 1.
     );
     //identity of object is same?? Serial.printf("task handle in setup: %X flavor: %s\n", this->_taskHandle, flavor.c_str());
@@ -167,6 +174,10 @@ void TDK_dmp_helper::setupRTOSWorkerTask() {
 /** Interrupt Service Routine setup by attachInterruptArg() which ties
  *  hardware interrupt pin to this ISR. This ISR cannot hold up the thread, so
  *  instead of doing work, it wakes up a worker task-thread.
+ *  ⛵⛵ "the captain listens for the boatswain's whistle's tune at which time
+ *  she run this to figure out what to do about it. She can't be distracted  
+ *  by she unblocks the proper worker thread [says make it so] and immediately returns
+ *  to running the ship. " ⛵⛵
  */
 void digiMotionProcessorInterruptSvcRoutine(void* thisHelperAsAVoidPtr) {
     // Serial.printf("..interruptCt: %d \n", interruptCt++);
@@ -175,6 +186,8 @@ void digiMotionProcessorInterruptSvcRoutine(void* thisHelperAsAVoidPtr) {
     // Serial.printf("..task handle in ISR: %X flavor:%s \n", thisHelper->_wakeMeUpOnInterrupt, thisHelper->flavor.c_str());
     BaseType_t IwasBlockedAndHigherPriorityThanYou = pdFALSE; // for output
     // this line returns immediately with pdTRUE if the task was waiting.
+    // Now UNBLOCK the worker thread. CONFUSION!!! use the ISR "HANDLE", not the
+    // actual ISR pointer...
     vTaskNotifyGiveFromISR(thisHelper->_wakeMeUpOnInterrupt, &IwasBlockedAndHigherPriorityThanYou);
     // SAVE...   if (IwasBlockedAndHigherPriorityThanYou == pdFALSE) 
     //     Serial.println("WARNING task NOT waiting or not higher.....");
