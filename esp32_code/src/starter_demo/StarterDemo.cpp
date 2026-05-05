@@ -2,7 +2,10 @@
 #include <i2c_helper.h>
 #include "StarterDemo.h"
 
-/** simplified demo to serve as starting point for new app */
+/** simple example demo to serve as starting template for new app 
+ *  It doesn't use the library of this project; it only scans the
+ *  i2c bus for connected devices.  
+*/
 StarterDemo::StarterDemo() {
   // constructor (empty for now)
 }

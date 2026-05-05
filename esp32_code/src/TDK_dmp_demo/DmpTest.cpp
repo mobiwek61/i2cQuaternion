@@ -25,14 +25,12 @@ TDK_dmp_helper* myDemo1 = nullptr;
 SemaphoreHandle_t i2cMutex = xSemaphoreCreateMutex();
 SemaphoreHandle_t serialMutex = xSemaphoreCreateMutex();
 
-/* gets called upon dmp interrupt [the Digital Motion Processor
-   on the invensense chip which does sensor fusion ]
-   Interrupts esp32 via the INT pin when it has new computed data ready
-   to send */
-// int intCt = 0;
+/** todo:rename NOT isr.  This callback is supplied to the library and is run by the
+ *  library when new data is available. It's run in it's own thread, so it won't be slowing
+ *  down anything else. 
+ *  "this is where a sailor gets its orders and does them"
+ */
 void newDataISR_task(std::string strA, Quaternion4 quat) {
-  // this is a callback invoked by the TDK_dmp_helper class when it gets an interrupt from the DMP chip, indicating new data ready. 
-  // I2C_Helper::serialPrintf(TDK_dmp_helper::_serialMutex, "int: %d ", intCt++);
   std::string eulerStr = getEulerString(quat.x, quat.y, quat.z);
   I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s eulerStr %s\n", strA.c_str(), eulerStr.c_str());
   // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s\n", strA.c_str());
@@ -44,7 +42,7 @@ void DmpTest::setup() {
   // above is plagarized by ai... 
   ////// not needed... this is at startup..  if (xSemaphoreTake(i2cMutex, MUTEX_TIMEOUT_MS)) {
   I2C_Helper::scanI2C(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN);
-  xSemaphoreGive(i2cMutex); // "next"
+  ////// xSemaphoreGive(i2cMutex); // "next"
   ///// } else { throw std::runtime_error("Failed to take i2c mutex in setup"); }
 
   //  Wire is a GLOBAL object defined in Arduino library, Wire.h
@@ -53,6 +51,7 @@ void DmpTest::setup() {
   Wire.setPins(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN); // tell it which pins for data and clock i2c.
   myDemo1 = new TDK_dmp_helper(Wire, newDataISR_task, i2cMutex, serialMutex, HARDWRE_INT_PIN);
   delay(100); // let bus settle
+  // this looks a bit strange because the published library works this way
   boolean my_i2c_address_69_true_68_false = true; // OR it's 0x68; use scanI2c to determine.
   if (!myDemo1->begin(my_i2c_address_69_true_68_false)) {
     Serial.println("begin failed. Press key to continue");

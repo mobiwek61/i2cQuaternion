@@ -122,7 +122,10 @@ bool TDK_dmp_helper::begin(boolean my_i2c_address_69_true_68_false) {
  *  Nobody cares how much time taken here because its own RTOS task-thread.  
  *  Semaphores used twice here:
  *  - one to block loop until data is ready
- *  - another to get semaphore to i2c bus.  
+ *  - another (mutex) to get semaphore to i2c bus.   
+ *  - "this is a sailor who waits for a semaphore. This sailor, after getting the
+ *   quaternion gives it to another sailor, the _dataRdyISR_task who moves the helm over 
+ *   or something like that. Note: it waits for the other sailor to complete." 
  */
 void isr_worker_loop_wait4semaphore(void* pvParameters) {
     while (true) {
