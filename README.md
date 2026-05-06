@@ -103,7 +103,7 @@ Notes for oscilloscope: FNRSI 2T53T
 Here are settings I find useful. 
 - "sameLine" tells the code-format feature not to put newline after open brace (takes too much space) 
 - to prevent headings from sticking at top of editor   
-  uncheck this: ```Editor › Sticky Scroll: Enabled```
+  uncheck this: ```Editor › Sticky Scroll: Disabled```
 - I have these here for when I setup a different computer and have forgotten all the settings...    
 ```
 # settings.json in .vscode for project 
