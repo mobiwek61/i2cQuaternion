@@ -1,4 +1,4 @@
-!! don't edit a private github repo in a browser that has an AI button. AI can see your non-public edits if you push the button !!
+!! if you use the AI button on browser while editing a private repo, AI can see your work !!
 
 ## i2cQuaternion
 Connecting i2c sensors to an esp32 is fun, particularly the orientation sensors aka **IMU** (**I**ntertial **M**easurment **U**nit). IMU data requires a  **sensor fusion** step to combine gyro, accelerometer and magentometer data into something usable. This describes how to build a system using an IMU which does it's own **sensor fusion** right on the chip.  I take a Heathkit-style approach, attempting to show just how things work and how parts interact with each other.   
@@ -41,10 +41,10 @@ When data is ready (at regular intervals set above) the INT (Interrupt) pin is p
   *[semaphores & mutex's are are nothing new, covered in classes the 80's at UW-Madison]*
   - **Interrupt** mechanism works in 2 steps here:  
     - a **worker task** ⛵ sailor running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [⛵ captain calls the sailor's name]. This task does not block anything because it's in its own thread.  The ⛵ sailor waits but does not sleep because it needs to detect it's semaphore!    
-    - When an interrupt happens and the designated INT pin gets pulled high, boatswain's whistle is blown with a certain tune to signal DSP data is ready to be obtained.  The captain hears it and runs the proper **ISR** where she decides what to do. In the **ISR**, the captain sends a freeRTOS **task notification** [calls out sailor's name and details] to the **worker task**. This unblocks the worker task to do it's thing, or in the captain's words, "make it so".  This lets the captain immediately return to running the ship without delay, to look out for the next asteroid to avoid.
+    - When an interrupt happens and the designated INT pin gets pulled low, ⛵ boatswain's whistle is blown with a certain tune ⛵ to signal DSP data is ready to be obtained.  The ⛵ captain hears it and runs the proper **ISR** where she decides what to do. In the **ISR**, the captain sends a freeRTOS **task notification** [⛵ calls out sailor's name and details] to the **worker task**. This unblocks the worker task to do it's thing, or in the captain's words, ⛵ "make it so".  This lets the captain immediately return to running the ship without delay, ⛵ to look out for the next asteroid to avoid.
 In i2c, only the "captain" can initiate an exchange.    
     - Now the **worker task** gets its semaphore notification [hears it's name], unblocks, and takes it's time to query the DMP over i2c for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. 
-- **UH OH!** 2 threads access i2c simultaneously === Crash Computer === Flying Dutchman  
+- **UH OH!** 2 threads access i2c simultaneously === Crash Computer === ⛵ Flying Dutchman ⛵
   Yes, the esp32 crashes when this happens.  
   - This is where openRTOS **semaphores** used as **mutex** [mutual exclusion] come into play.   
   - At startup, this app sets up **one SemaphoreHandle_t object** for the **i2c bus** and is passed to all objects using the i2c bus.  
@@ -79,7 +79,7 @@ Structure of /lib:
 
 ### C++ vs Java, Typescript  
 - The esp32 code here uses the ancient C++ language which I used before I heard of Java; I learned it from a **book**.  
-- C++'s  distictive **pointers** and **address-of** operators aka sharks are versatile and dangerous but provide it with specific control over hardware needed for this system.  They reference locations in physical memory, unheard of in Java. 
+- C++'s  distictive **pointers** and **address-of** operators aka sharks are versatile and dangerous but provide it with specific control over hardware needed for this system.  They reference locations in physical memory, unheard of in Java. It gets compiled right into machine code, running very fast right on the silicon.  
 ### My experience with AI  
 - Use AI to help learn C++. Ask it the right questions and it will help sort out confusion about C++.  Best to learn from a book and use AI as a coach.  
 It makes great short coding examples, but tends to **bury simple code beneath layers of indirection** and **wrappers it invents**. It may even hide C++ features in wrappers to look like java, to make you happy. Try to use prompts to avoid this.  
