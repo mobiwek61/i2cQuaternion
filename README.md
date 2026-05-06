@@ -1,3 +1,5 @@
+!! don't edit a private github repo in a browser that has an AI button. AI can see your non-public edits !!
+
 ## i2cQuaternion
 Connecting i2c sensors to an esp32 is fun, particularly the orientation sensors aka **IMU** (**I**ntertial **M**easurment **U**nit). IMU data requires a  **sensor fusion** step to combine gyro, accelerometer and magentometer data into something usable. This describes how to build a system using an IMU which does it's own **sensor fusion** right on the chip.  I take a Heathkit-style approach, attempting to show just how things work and how parts interact with each other.   
 This is also my foray into creative writing.       
