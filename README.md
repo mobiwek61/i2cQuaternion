@@ -22,7 +22,7 @@ This chip typically purchased by hobbyists on a "breakout board" with support ha
 #### More about **quaternion:** 
 - They're popular and your phone's already using it for games, gestures: the Web API's **AbsoluteOrientationSensor** provides them from the phone's sensor fusion, and so does the Android developer's API.   
 - it's a set of 4 float values. Easily converted to roll/pitch.yaw **"euler angles"** "oiler" for display or troubleshooting. Popular 3D libraries such as Three.js and OpenGL take quaternions as a parameter for orienting models, lights or cameras. 
-- **Gimbal Lock:** Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: On your flight sim points you point the plane straight up and the scene starts rapidly flipping back and forth 180 degrees. Also refer to the movies "Apollo 13", "Hidden Figures (not directly mentioned but you it's going on)" for examples.    
+- **Gimbal Lock:** Quaternions are less susceptible to **Gimbal Lock** then euler angles. Example: On your flight sim points you point the plane straight up and the scene starts rapidly flipping back and forth 180 degrees. Also refer to the movies "Apollo 13" and "Hidden Figures" to see Math in space in action.    
   Quaternions use matrices and imaginary numbers and a stone bridge in Ireland is named after it. That's about how far my understanding goes and I'm ok with that. 
 
 ### Objective 
