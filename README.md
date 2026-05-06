@@ -116,6 +116,7 @@ Here are settings I find useful.
 ## VSCode notes about platformIO project folder vs GitHub location: 
 * In windows disable "hide hidden folders" in file manager to you can **see** the **.git folders**.  
 * During development, I sometimes have many independent unrelated projects in subfolders, all inside one GitHub repo. I do that so everything can be backed up in one place.    
-* in vscode platformIO (for esp32, not reactjs), need to point platformIO to one of the projects, using filesystem location. Note that this is **independent** from the GitHub repo project location.
-* After copying an existing project into a github repo, be sure to **delete the .git folder**. 
+  * in vscode platformIO (for esp32, not reactjs), need to point platformIO to one of the projects, using filesystem location. Note that this is **independent** from the GitHub repo project location.
+* After copying an existing project into subfolder of existing github repo, be sure to **delete the .git folder**.
+* AI saves the day when you forget to git-pull on your laptop after committing on your desktop. Now you just tell it the error message and what you want to do; no panicking over those git error messages. 
 
