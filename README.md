@@ -3,7 +3,7 @@ Connecting i2c sensors to an esp32 is fun, particularly the orientation sensors 
 This is also my foray into creative writing.       
 ### Introduction
 This project codes an Esp32s3 connected to an **IMU** to get coordinates as a **quaternion** many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. 
-- The physical device for this costs about $35 in parts from reputable sellers and is very compact.  
+- The physical device for this costs about $35 in parts from reputable manufacturers and is very compact.  
 - For upcoming BLE interface, see [TODO's and other approaches to learning](#todos-and-other-approaches-to-learning)
 
 ### More about this code  
