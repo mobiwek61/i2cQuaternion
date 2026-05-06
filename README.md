@@ -88,7 +88,7 @@ It makes great short coding examples, but tends to **bury simple code beneath la
 ### Monitoring i2c and interrupt using Oscilloscope 
 - Strictly optional; it's fun to get to hardware and see what's really happening on the wires. OK to do on a $35 system with wires sticking out of it, maybe not on your pricy laptop.    
 - Here's a trace of the **i2c bus** as saved by the scope in memory:  
-  Top trace is data pin; bottom is clock pin. Images show effect of pullup resistor on i2c. Note that spikiness is probably caused by capacitance in the test leads. Pullups appear to be necessary, as the corners are less rounded but not very much:  
+  Top trace is data pin; bottom is clock pin. Images show effect of pullup resistor on i2c. Note that spikiness is probably caused by capacitance in the test leads. Pullups don't appear to be necessary, as the corners are less rounded but by not very much:  
 
   ![Screenshot 2](esp32_code/pics/WithPullupResistor.jpg)&nbsp;&nbsp;&nbsp;![Screenshot 2](esp32_code/pics/NoPullupResistor.jpg)   
 
