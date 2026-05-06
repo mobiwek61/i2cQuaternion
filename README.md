@@ -52,7 +52,7 @@ In i2c, only the "captain" can initiate an exchange.
     ```xSemaphoreTake(xSemaphore, blockTime)``` will **block** until xSemaphore becomes available.  
     ```xSemaphoreGive(xSemaphore)``` must be called to   
   **release the semaphore**.    
-  If not done the system locks up and sailor gets an Albatross to wear.  
+  If not done the system locks up ⛵ "painted ship Upon a painted ocean" and sailor gets an Albatross to wear.  
    *try-catch exception handler is needed to release the semaphore if runtime error prevents its release.*
   - I may be wrong but BLE **B**luetooth **L**ow **E**nergy takes care of its own concurrency.
 - Boatswain's whistle can also heard aboard starships to alert the captain into action.   
