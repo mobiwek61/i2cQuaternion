@@ -30,16 +30,15 @@ This chip typically purchased by hobbyists on a "breakout board" with support ha
 For the forseeable future, an actual sailing drone is not happening, although it sounds like fun. ⛵⛵
 
 ### How this system works  
-- First there is a clock driving updates done by the DMP on the chip.   
-It's timing is set by ```setDMPODRrate()```.   
-When data is ready (at regular intervals set above) the INT (Interrupt) pin goes high, effectively sounding the boatswain's whistle which the captain hears and acts upon.
-- Handling hardware interrupts: arduino code senses a designated physical interrupt pin (this one raised by the **DMP**) to trigger a specific **Interrupt Service Routine (ISR)** tied to it. [a function]
-  - we can read the sensor and handle the data now, **but we don't** because the processor captain is **very busy** running the ship and **can't be interrupted**, such as responding instantly to user input or updating graphics or avoiding a reef.
+- The **DMP** on the chip clocks the system with periodic interrupts, set with ```setDMPODRrate()```.   
+When data is ready (at regular intervals set above) the INT (Interrupt) pin is pulled low, effectively sounding the ⛵ boatswain's whistle which the captain hears and acts upon:  
+- Arduino code senses this DMP-triggered interrupt pin and runs a specific **Interrupt Service Routine (ISR)** tied to it. [a function]
+  - we can read the sensor and handle the data now, **but we don't** because the processor ⛵captain is **very busy** running the ship and **can't be interrupted**, such as responding instantly to user input or updating graphics or ⛵ avoiding a reef.
 - instead, **freeRTOS** saves the day by assigning work to the sailors:
-  - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** (aka **threads** aka sailors), and **semaphores**. Threads are like sailors carrying out shipboard tasks and semaphores are like spoken orders directed to a sailor by name, shouted out loud over the wind and waves.     
+  - "**R**eal **T**ime **O**perating **S**ystem" is builtin to the esp32 and enables **tasks** (aka **threads** aka ⛵ sailors), and **semaphores**. Threads are like ⛵ sailors carrying out shipboard tasks, and semaphores are like spoken orders directed to a sailor by name, ⛵ shouted out loud over the wind and waves.     
   *[semaphores & mutex's are are nothing new, covered in classes the 80's at UW-Madison]*
   - **Interrupt** mechanism works in 2 steps here:  
-    - a **worker task** sailor running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [captain calls the sailor's name]. This task does not block anything because it's in its own thread.  The sailor waits but does not sleep because it needs to detect it's semaphore!    
+    - a **worker task** ⛵ sailor running in an endless loop, which **STOPS AND WAITS** 99% of the time. It waits for a freeRTOS **task notification**, a form of semaphore [⛵ captain calls the sailor's name]. This task does not block anything because it's in its own thread.  The ⛵ sailor waits but does not sleep because it needs to detect it's semaphore!    
     - When an interrupt happens and the designated INT pin goes high, boatswain's whistle is blown with a certain tune to signal DSP data is ready to be obtained.  The captain hears it and runs the proper **ISR** where she decides what to do. In the **ISR**, the captain sends a freeRTOS **task notification** [calls out sailor's name and details] to the **worker task**. This unblocks the worker task to do it's thing, or in the captain's words, "make it so".  This lets the captain immediately return to running the ship without delay, to look out for the next asteroid to avoid.
 In i2c, only the "captain" can initiate an exchange.    
     - Now the **worker task** gets its semaphore notification [hears it's name], unblocks, and takes it's time to query the DMP over i2c for current data and act on it, including moving servos etc. When done, it goes back to the blocked state, waiting again. 
