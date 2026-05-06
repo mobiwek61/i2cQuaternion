@@ -72,7 +72,7 @@ Structure of /lib:
 
 ### TODO's and other approaches to learning   
 - My next TODO is to add **BLE** [bluetooth low energy] which will send a notification with a new quaternion when available.  This means that you write a ReactJS web app (using ThreeJS for example) running on a phone, which gets a stream of quaternions over BLE. You don't have to know a thing about C++, freeRTOS and all the stuff I'm about to detail. ThreeJS lets you do lots of fun 3D stuff using quaterions while not needing to know the [incredibly complicated] math.  
-- If you just want a more direct way to get started with sensors and quaternions, a far easier way is to code a ThreeJS/ReactJS web app on a gyro-enabled phone using node.js, Vite (dev platform) and visual studio. The web API gives you a quaternion from the phone's gyro. 
+- If you just want a more direct way to get started with sensors and quaternions, a far easier way is to do it all on your phone:  Code a ThreeJS/ReactJS web app on a gyro-enabled phone using node.js, Vite (dev platform) and visual studio. The web API gives you a quaternion from the phone's gyro. 
 
 
 ### C++ vs Java, Typescript  
