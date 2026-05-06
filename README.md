@@ -1,5 +1,6 @@
 ## i2cQuaternion
-Connecting i2c sensors to an esp32 is fun but my favorites are the orientation sensors. This describes how to build a system around one which does it's own **sensor fusion**, a complicated process.  I take a Heathkit-style approach, attempting to show just how things work and how parts interact with each other.    
+Connecting i2c sensors to an esp32 is fun but my favorites are the orientation sensors. This describes how to build a system around one which does it's own **sensor fusion**, a complicated process.  I take a Heathkit-style approach, attempting to show just how things work and how parts interact with each other.   
+This is also my foray into creative writing.       
 ### Introduction to this project  
 This project codes an Esp32s3 connected to an **IMU** [see below] to get quaternion data many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. 
 - The physical device for this costs about $35 in parts from reputable sellers and is very compact.  
