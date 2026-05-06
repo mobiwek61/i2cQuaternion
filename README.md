@@ -86,7 +86,7 @@ It makes great short coding examples, but tends to **bury simple code beneath la
 - AI wrote functioning BLE code by ignoring the BLE framework and inventing its own send/receive protocol on top of the real protocol. I followed its example until I realized nothing on the internet used that "protocol". 
 
 ### Monitoring i2c and interrupt using Oscilloscope 
-- Strictly optional; it's fun to get to hardware and see what's really happening on the wires. OK to do on a $30 system, maybe not on a real computer.  
+- Strictly optional; it's fun to get to hardware and see what's really happening on the wires. OK to do on a $35 system with wires sticking out of it, maybe not on your pricy laptop.    
 - Here's a trace of the **i2c bus** as saved by the scope in memory:  
   Top trace is data pin; bottom is clock pin. Images show effect of pullup resistor on i2c. Note that spikiness is probably caused by capacitance in the test leads. Pullups appear to be necessary, as the corners are less rounded but not very much:  
 
