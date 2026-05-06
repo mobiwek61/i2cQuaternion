@@ -3,7 +3,7 @@ Connecting i2c sensors to an esp32 is fun but my favorites are the orientation s
 ### Introduction to this project  
 This project codes an Esp32s3 connected to an **IMU** [see below] to get quaternion data many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. 
 - The physical device for this costs about $35 in parts from reputable sellers and is very compact.  
-[Go to TODO section](#todos-and-other-approaches-to-learning)
+- [TODO's and other approaches to learning](#todos-and-other-approaches-to-learning)
 
 ### More about this code  
 - The **IMU** (**I**ntertial **M**easurment **U**nit) chip is a **TDK ICM-20948**. This chip has a **DMP** [**D**igital **M**otion **P**rocessor] which it uses to convert raw gyro, accelerometer and compass data into useful orientation yaw/pitch/roll without the need for separate **sensor fusion** coding.        
