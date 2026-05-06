@@ -3,6 +3,7 @@ Connecting i2c sensors to an esp32 is fun but my favorites are the orientation s
 ### Introduction to this project  
 This project codes an Esp32s3 connected to an **IMU** [see below] to get quaternion data many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. 
 - My next TODO is to add **BLE** [bluetooth low energy] which will send a notification with a new quaternion when available.  This means that you write a ReactJS web app (using ThreeJS for example) running on a phone, which gets a stream of quaternions over BLE. You don't have to know a thing about C++, freeRTOS and all the stuff I'm about to detail. ThreeJS lets you do lots of fun 3D stuff using quaterions while not needing to know the [incredibly complicated] math.  
+- If you just want a more direct way to get started with sensors and quaternions, a far easier way is to code a ThreeJS/ReactJS web app on a gyro-enabled phone using node.js, Vite (dev platform) and visual studio. The web API gives you a quaternion from the phone's gyro. 
 - The physical device for this costs about $35 in parts from reputable sellers and is very compact.      
 ### More about this code  
 - The **IMU** (**I**ntertial **M**easurment **U**nit) chip is a **TDK ICM-20948**. This chip has a **DMP** [**D**igital **M**otion **P**rocessor] which it uses to convert raw gyro, accelerometer and compass data into useful orientation yaw/pitch/roll without the need for separate **sensor fusion** coding.        

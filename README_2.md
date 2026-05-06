@@ -1,10 +1,10 @@
 
 ## README_2.MD: additional notes
-
+These are disorganized notes I don't want to lose.   
 
 # Setting up vscode in ubuntu
 - using ubuntu instead of win11 for esp32 because w11 c++ compile is very slow.  
-- ubuntu file manager "nautilus" is bad. Install nemo:  
+- I don't like ubuntu file manager "nautilus"; I Install nemo:  
 ```
 sudo apt update
 sudo apt install nemo
@@ -20,9 +20,9 @@ apt-get install git
 sudo apt install python3-venv
 
 # Set your global name
-git config --global user.name "ubuntu17"
+git config --global user.name "myName"
 # Set your global email
-git config --global user.email "ubuntu17@example.com"
+git config --global user.email "myName@example.com"
 ```
 ## platformIO ubuntu
 - when starting vscode with platformIO, for about 10 seconds is asks what project to open -DONT DO ANYTHING! - after a bit it opens the last project by itself. 
@@ -73,7 +73,7 @@ $ pio run --target clean
 ```
 
 ### Monitoring interrupt pin on DS212 "toy oscilloscope"
-- Not as good as FNRSI scope; mine intermittenly shows big square wave randomly....   
+- mine intermittenly shows big square wave randomly....   
 - set timebase; trigger takes more time to fire and produce output the longer the timebase: 20mS-immediate; .1Sec-3 Sec; .2Sec-6 Sec; 50mS-1 Sec.    
   (per grating division on screen). 
 - at this high speed, impossible for repeating interrupts to appear periodically on screen. Instead, do this way:  
