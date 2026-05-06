@@ -4,7 +4,7 @@
 #include <bitset>
 
 /** 
- *  NOTE: setBitSaveOld() depends on ICM_20948 which is bad.
+ *  NOTE: setBitSaveOld() depends on ICM_20948 which is bad practice for a universal library.
  *  If not using this chip comment out include and this function or modify
  *  for chip/library you're using. 
  *  Sets requested bit on register without changing other values, then optionally 
