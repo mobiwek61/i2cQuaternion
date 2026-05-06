@@ -58,8 +58,8 @@ In i2c, only the "captain" can initiate an exchange.
 - ⛵ Boatswain's whistle can also heard aboard starships to alert the captain into action.   
 
 ### Libraries and Helper Classes
-- Look in platformio.ini ship's manifest to see the published library used to access the chip. 
-- I added helper functions, organized as those tied to specific hardware and universal use:  
+- Look in platformio.ini ⛵ ship's manifest to see the github library used to access the chip. 
+- I added helper functions, organized as those tied to specific hardware "hdwreHelpers" and universal use:  
 Structure of /lib:   
 ```
     lib/myLib
@@ -70,7 +70,6 @@ Structure of /lib:
   Mathhelper.cpp   [interrupt & semaphore here]
   and more
 ```
-[Go to TODO section](#todos-and-other-approaches-to-learning)
 
 ### TODO's and other approaches to learning   
 - My next TODO is to add **BLE** [bluetooth low energy] which will send a notification with a new quaternion when available.  This means that you write a ReactJS web app (using ThreeJS for example) running on a phone, which gets a stream of quaternions over BLE. You don't have to know a thing about C++, freeRTOS and all the stuff I'm about to detail. ThreeJS lets you do lots of fun 3D stuff using quaterions while not needing to know the [incredibly complicated] math.  
