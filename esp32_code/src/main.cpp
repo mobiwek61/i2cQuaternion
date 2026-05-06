@@ -5,7 +5,7 @@
 #include "S3LedHelper.h"
  
 /** 
- * This app is nothing more than a switcher to go between examples.  
+ * This **main.cpp** app is nothing more than a switcher to go between examples.  
  * To make your own app, add reference to it here and set myRunnable to it  
  */
 DmpTest myDmpTest;   

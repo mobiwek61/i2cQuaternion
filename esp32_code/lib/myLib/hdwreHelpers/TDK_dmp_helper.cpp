@@ -6,8 +6,10 @@
 int msecBlok = 200;
         
 // REQUIRES THIS FLAG IN PLATFORMIO.INI: "-D ICM_20948_USE_DMP".
-// Originated from Example6_DMP_Quat9_Orientation.ino example in SparkFun ICM-20948 library
-
+// This code Originated from Example6_DMP_Quat9_Orientation.ino example in SparkFun ICM-20948 library
+// ref: https://randomnerdtutorials.com/esp32-freertos-mutex-arduino/ 
+// [above is plagarized by ai]... 
+  
 // define STATIC CLASS members (declared in .h) here, to allocate memory or linker fails.
 SemaphoreHandle_t TDK_dmp_helper::_i2cMutex = NULL;
 SemaphoreHandle_t TDK_dmp_helper::_serialMutex = NULL; 
@@ -28,7 +30,7 @@ TDK_dmp_helper::TDK_dmp_helper(TwoWire& i2cWire, DmpInterrCallback dataRdyCallba
 
 volatile int interruptCt = 0;
 
-/** Sets up the interrupts for the DMP. Numbers from PDF document downloaded
+/** Sets up the interrupts for the DMP. Numbers set here are from PDF document downloaded
  *  from manufacturer. I'm not sure about copyrights, so it's not in this project.
 */
 void TDK_dmp_helper::setupPinInterrupt() {
@@ -85,8 +87,7 @@ bool TDK_dmp_helper::begin(boolean my_i2c_address_69_true_68_false) {
     /* ref: https://github.com/sparkfun/SparkFun_ICM-20948_ArduinoLibrary/blob/main/DMP.md
     initializeDMP downloads the DMP (for quaternion) firmware; and configures registers.
     Quaternions obtained by mixing gyro, accelerometer, mag data using heavy math. 
-    Quat not as intuitive as euler angles but easily converted to them; they can
-    be fed to 3d engines like Three.js, SGI GL for lota neat stuff */
+    */
     if (_myICM.initializeDMP() != ICM_20948_Stat_Ok)
         Serial.println(F("DMP failed to initialize."));
     if (_myICM.enableDMPSensor(INV_ICM20948_SENSOR_ORIENTATION) != ICM_20948_Stat_Ok)

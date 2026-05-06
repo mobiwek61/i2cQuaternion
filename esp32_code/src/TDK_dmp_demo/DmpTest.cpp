@@ -39,9 +39,7 @@ void callbackFn_A(std::string strA, Quaternion4 quat) {
 }
 
 void DmpTest::setup() {
-  // I2C_Helper::testQMC5883_magnetometr_Connection(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN); return;
-  // ref: https://randomnerdtutorials.com/esp32-freertos-mutex-arduino/ 
-  // above is plagarized by ai... 
+  // other project... I2C_Helper::testQMC5883_magnetometr_Connection(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN); return;
   ////// not needed... this is at startup..  if (xSemaphoreTake(i2cMutex, MUTEX_TIMEOUT_MS)) {
   I2C_Helper::scanI2C(I2C_SDA_DATAPIN, I2C_SCL_CLOCKPIN);
   ////// xSemaphoreGive(i2cMutex); // "next"
