@@ -130,9 +130,9 @@ bool TDK_dmp_helper::begin(boolean my_i2c_address_69_true_68_false) {
  *  Semaphores used twice here:
  *  - one to block loop until data is ready
  *  - another (mutex) to get semaphore to i2c bus.   
- *  ⛵⛵ "this is a sailor who waits for a semaphore. This sailor, after getting the
- *   quaternion gives it to another sailor, the _dataRdyCallback who moves the helm over 
- *   or something like that. Note: it waits for the other sailor to complete." ⛵⛵ 
+ *  ⛵⛵ "this is a sailor who waits for a semaphore. This sailor gets notified to wake up, told there is
+ *   data ready from the DMP and fetches it. It then gives the quaternion to another sailor [the callback _dataRdyCallback] 
+ *   who moves the helm over or something like that. Note: it waits for the other sailor to complete." ⛵⛵ 
  */
 void isr_worker_loop_wait4semaphore(void* pvParameters) {
     while (true) {
@@ -146,8 +146,9 @@ void isr_worker_loop_wait4semaphore(void* pvParameters) {
         // its not a problem but if more sensors added later, is a big problem. ⛵
         if (xSemaphoreTake(TDK_dmp_helper::_i2cMutex, pdMS_TO_TICKS(msecBlok)) == pdTRUE) {
             // now I got the semaphore and nobody else has it.
+            // now get on the i2c bus and request quaternion data from the IMU. 
             thisHelper->fetchDMPdata(&quat);
-            // give it back to the next train waiting at the siding.  
+            // now give semaphore back ⛵⛵ so it's available to the next train waiting at the siding.  
             xSemaphoreGive(TDK_dmp_helper::_i2cMutex);  
         }
         // invoke callback ⬇️⬇️⬇️ from app using this. Typically sends data over ble.
