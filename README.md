@@ -1,15 +1,18 @@
-!! if you use the AI button on browser while editing a private repo, AI can see your work !!
 
 ## i2cQuaternion
-Connecting i2c sensors to an esp32 is fun, particularly the orientation sensors aka **IMU** (**I**ntertial **M**easurment **U**nit). IMU data requires a  **sensor fusion** step to combine gyro, accelerometer and magentometer data into something usable. This describes how to build a system using an IMU which does it's own **sensor fusion** right on the chip.  I take a Heathkit-style approach, attempting to show just how things work and how parts interact with each other.   
-This is also my foray into creative writing.       
+i2c sensors connected to an esp32 can do a lot of neat stuff, particularly the orientation sensors aka **IMU** (**I**ntertial **M**easurment **U**nit).   
+Raw IMU data reflects current rate of change from the gyro, and position from the magnetometer, but gyro data is all off if the unit is not level, and rate of change is not what you're usually after.      
+**sensor fusion** steps in to combine data into something usable, where values are in the frame of reference to the you on  the Earth's surface, your local horizon, and North.    
+This describes how to build a system using an IMU which does it's own **sensor fusion** right on the chip.    
+I take a Heathkit-style approach, attempting to show just how things work and how parts interact with each other.   
+This is also my attempt at creative writing.       
 ### Introduction
 This project codes an Esp32s3 connected to an **IMU** to get coordinates as a **quaternion** many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. 
-- The physical device for this costs about $35 in parts from reputable manufacturers and is very compact.  
+- The physical device for this costs about $35 in parts from reputable manufacturers and is very compact and battery powered.   
 - For upcoming BLE interface, see [TODO's and other approaches to learning](#todos-and-other-approaches-to-learning)
 
 ### More about this code  
--  **TDK ICM-20948** is the **IMU** chip. Others can be used, but then a library like **MadgwickAHRS** is used to do sensor fusion on the esp32.       
+-  **TDK ICM-20948** is the **IMU** chip. Others can be used without onboard sensor fusion, but then a library like **MadgwickAHRS** is used to do sensor fusion on the esp32.       
 Many times per second, the **IMU** pulls its **hardware interrupt** pin low to alert the esp32 of an updated quaternion.  
 Use of **interrupts** brings in the need for a **multi-threaded architecture**, also utilized further by multi-core processors (Esp32s3 has 2). Threads[aka tasks], semaphores and mutex'es, are taken care of by **freeRTOS**, built right into the esp32s3 and used by this code.  In-code documentation indicates where and how it's used.      
 - Programming language **C++** is used instead of modern ones like Java or Typescript because of it's close coupling to **memory and hardware**; it's compiled runnable is very fast, necessary for a tiny, low power realtime system as shown here. It's a long way from "a computer you could lift up".        
