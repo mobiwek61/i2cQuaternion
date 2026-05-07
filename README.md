@@ -120,5 +120,7 @@ Here are settings I find useful.
 * During development, I sometimes have many independent unrelated projects in subfolders, all inside one GitHub repo. I do that so everything can be backed up in one place.    
   * in vscode platformIO (for esp32, not reactjs), need to point platformIO to one of the projects, using filesystem location. Note that this is **independent** from the GitHub repo project location.
 * After copying an existing project into subfolder of existing github repo, be sure to **delete the .git folder**.
-* AI saves the day when you forget to git-pull on your laptop after committing on your desktop. Now you just tell it the error message and what you want to do; no panicking over those git error messages. 
+* AI saves the day when you forget to git-pull on your laptop after committing on your desktop. Now you just tell it the error message and what you want to do and let AI read all the git manuals and be the git expert (we all hope).  
+### About the author  
+I'm a retired NYC Civil Servant experienced coding, with electronics as a sometimes hobby. From my perspective this project is just for fun.   
 
