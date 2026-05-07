@@ -4,7 +4,7 @@ i2c sensors connected to an esp32 can do a lot of neat stuff, particularly the o
 Raw IMU data reflects current rate of change from the gyro, and orientation from the accelerometer. Unless the unit is level,  gyro data is not usable.          
 **sensor fusion** steps in to combine sensor data into something usable, where values are in your frame of reference relative to the Earth's surface, usually known as **Roll, Pitch and Yaw**.  This describes how to build a system using a commercially available IMU which does it's own **sensor fusion**, right on the chip, using a builtin **DMP** (**D**igital **M**otion **P**rocessor).       
 I take an old fashioned build-electronics-from-a-kit approach, attempting to show just how things work and how parts interact with each other.   
-This is also my attempt at creative writing.       
+This README is also my attempt at creative writing.       
 ### Introduction
 This project codes an Esp32s3 connected to an **IMU** to get coordinates as a **quaternion** many times per second and **display it as yaw/pitch/roll**, with magnetic compass direction for **yaw**. 
 - The physical device for this costs about $35 in parts from reputable manufacturers and is very compact and battery powered.   
