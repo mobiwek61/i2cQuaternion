@@ -27,13 +27,13 @@ SemaphoreHandle_t serialMutex = xSemaphoreCreateMutex();
 
 /** This callback is supplied to the library and is run many times per second
  *  when new data is available. It's run in it's own thread, so it won't be slowing
- *  down anything else. 
+ *  down anything else. Search "buoy88" to see when it's called.  
  *  "⛵this is where a sailor gets its orders from the captain and does them"
  */
 void callbackFn_A(std::string strA, Quaternion4 quat) {
   // quaternions are awkward to read, convert it to euler angles for display. 
   std::string eulerStr = getEulerString(quat.x, quat.y, quat.z);
-  I2C_Helper::serialPrintf(serialMutex, "DmpTest %s\n", eulerStr.c_str());
+  I2C_Helper::serialPrintf(serialMutex, "%s\n", eulerStr.c_str());
   // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s eulerStr %s\n", strA.c_str(), eulerStr.c_str());
   // I2C_Helper::serialPrintf(serialMutex, "DmpTest strA %s\n", strA.c_str());
 }

@@ -152,7 +152,8 @@ void isr_worker_loop_wait4semaphore(void* pvParameters) {
             xSemaphoreGive(TDK_dmp_helper::_i2cMutex);  
         }
         // invoke callback ⬇️⬇️⬇️ from app using this. Typically sends data over ble.
-        thisHelper->_dataRdyCallback("data rdy: ", quat);
+        // buoy88
+        thisHelper->_dataRdyCallback("thurs7 ", quat);
         // now repeat loop and WAIT for "blocking" semaphore. 
     }
 }
