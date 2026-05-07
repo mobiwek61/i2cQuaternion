@@ -121,6 +121,8 @@ Here are settings I find useful.
   * in vscode platformIO (for esp32, not reactjs), need to point platformIO to one of the projects, using filesystem location. Note that this is **independent** from the GitHub repo project location.
 * After copying an existing project into subfolder of existing github repo, be sure to **delete the .git folder**.
 * AI saves the day when you forget to git-pull on your laptop after committing on your desktop. Now you just tell it the error message and what you want to do and let AI read all the git manuals and be the git expert (we all hope).  
+### mobiwek61
+Need a unique name to prevent confusion with other users: "mobi" for mobile apps, "weka" is bird in New Zealand and "61" is ascii for "a".    
 ### About the author  
 I'm a retired NYC Civil Servant and experienced coder, with electronics as a sometimes hobby. I built an oscillosope from a kit 40 years ago. From my perspective this project is just for fun.   
 
