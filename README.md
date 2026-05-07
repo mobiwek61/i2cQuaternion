@@ -122,5 +122,5 @@ Here are settings I find useful.
 * After copying an existing project into subfolder of existing github repo, be sure to **delete the .git folder**.
 * AI saves the day when you forget to git-pull on your laptop after committing on your desktop. Now you just tell it the error message and what you want to do and let AI read all the git manuals and be the git expert (we all hope).  
 ### About the author  
-I'm a retired NYC Civil Servant experienced coding, with electronics as a sometimes hobby. From my perspective this project is just for fun.   
+I'm a retired NYC Civil Servant and experienced coder, with electronics as a sometimes hobby. I built an oscillosope from a kit 40 years ago. From my perspective this project is just for fun.   
 
