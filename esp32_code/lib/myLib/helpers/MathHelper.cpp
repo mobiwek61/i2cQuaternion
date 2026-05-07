@@ -1,7 +1,7 @@
 #include "MathHelper.h"
 
-/** gemini written march 27 2026
- * Converts ICM-20948 Quat9 data to a formatted Euler string.
+/** This version machine-assembled by AI march 27 2026
+ * Converts Quat9 data to a formatted Euler string.
  * Includes a 90-degree Z-axis rotation to reset orientation.
  */
 std::string getEulerString(double q1, double q2, double q3) {
