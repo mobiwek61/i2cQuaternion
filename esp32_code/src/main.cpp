@@ -24,7 +24,8 @@ ArduinoRunnable* myRunnable =
 void setup() {
     Serial.begin(115200); // initialize for Serial.printf() ...
     delay(100); // time to stabilize
-    Serial.println("======++++++++++++ top level setup()");
+    Serial.println("\n+++ main.cpp setup(), calls myRunnable setup()...");
+    delay(100); 
     // Following is useful to detect your device if you're unsure of its address. AI
     // I2C_Helper::scanI2C(I2C_SDA, I2C_SCL); return; 
 
