@@ -125,5 +125,5 @@ Here are settings I find useful.
 ### mobiwek61
 Need a unique name to prevent confusion with other users: "mobi" for mobile apps, "weka" is bird in New Zealand and "61" is ascii for "a".    
 ### About the author  
-I'm a retired NYC Civil Servant and experienced coder, with electronics as a sometimes hobby. I built an oscillosope from a kit 40 years ago. From my perspective this project is just for fun.   
+I'm a retired NYC Civil Servant and experienced coder, with electronics as a sometimes hobby.  From my perspective this project is just for fun.  A 2-core computer for the price of a latte and gyro nav system on a chip for the price of avocado toast is just incredible from my perspective.   
 
