@@ -1,6 +1,7 @@
 
 ## i2cQuaternion
 i2c sensors connected to an esp32 can do a lot of neat stuff, particularly the orientation sensors aka **IMU** (**I**ntertial **M**easurment **U**nit).   
+![processor+imu](esp32_code/pics/screenNesp3.jpg)   
 Raw IMU data reflects current rate of change from the gyro, and orientation from the accelerometer. Unless the unit is level,  gyro data is not usable.          
 **sensor fusion** steps in to combine sensor data into something usable, where values are in your frame of reference relative to the Earth's surface, usually known as **Roll, Pitch and Yaw**.  This describes how to build a system using a commercially available IMU which does it's own **sensor fusion**, right on the chip, using a builtin **DMP** (**D**igital **M**otion **P**rocessor).       
 I take an old fashioned build-electronics-from-a-kit approach, attempting to show just how things work and how parts interact with each other.   
